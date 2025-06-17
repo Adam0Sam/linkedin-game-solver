@@ -1,0 +1,10 @@
+body {
+    width: 300px;
+    padding: 10px;
+}
+
+#htmlOutput {
+    margin-top: 10px;
+    overflow: auto;
+    max-height: 400px;
+}
