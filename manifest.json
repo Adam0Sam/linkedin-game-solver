@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "HTML Reader",
+  "name": "Automatic Linkedin Games Solver",
   "version": "1.0",
-  "description": "Reads HTML content of the active tab",
+  "description": "This extension automatically solves Linkedin games at the click of a button.",
   "permissions": [
     "activeTab",
     "scripting"
@@ -14,11 +14,26 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.linkedin.com/games*",
-        "https://linkedin.com/games*"
+        "https://www.linkedin.com/*",
+        "https://linkedin.com/*"
       ],
       "js": [
         "content-script.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "game-html-parser.js",
+        "grid-cell.js",
+        "core/*",
+        "parsers/*",
+        "solvers/*",
+        "utils/*"
+      ],
+      "matches": [
+        "https://*.linkedin.com/*"
       ]
     }
   ],
