@@ -1,12 +1,6 @@
 import { AbstractGameSolver } from "./AbstractGameSolver.js";
 import { QueensGridCell } from "../utils/grid/QueensGridCell.js";
-import { gridToAsciiWithColors } from "../utils/grid-to-ascii.js";
-
-const STATE_CHAR_MAP = {
-  empty: "○",
-  queen: "♛",
-  cross: "×",
-};
+import { queensGridToAsciiWithColors } from "../utils/queens-grid-to-ascii.js";
 
 class ColorGroup {
   constructor(color) {
@@ -209,18 +203,11 @@ export default class QueensGameSolver extends AbstractGameSolver {
     }
 
     const color = this.#sortedColors[colorIndex];
-    console.log(`Visiting color group: ${color} at index ${colorIndex}`);
     const colorGroup = currentSnapshot.colorGroupMap.get(color);
-    console.log("Color Group: ", colorGroup);
     const emptyCells = currentSnapshot.getEmptyCellsInGroup(colorGroup);
 
     for (const cell of emptyCells) {
-      console.log("Visiting Cell: ", cell.toString());
       const nextSnapshot = currentSnapshot.placeQueen(cell);
-      console.log(
-        "Grid Snapshot: ",
-        gridToAsciiWithColors(nextSnapshot.grid, STATE_CHAR_MAP)
-      );
 
       const solutionSnapshot = this.visitColorGroup(
         nextSnapshot,

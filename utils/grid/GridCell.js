@@ -19,6 +19,6 @@ export class GridCell {
    * @returns {string}
    */
   toString() {
-    return `${this.col},${this.row}`;
+    return `${this.row},${this.col}`;
   }
 }

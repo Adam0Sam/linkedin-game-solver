@@ -1,11 +1,5 @@
 import QueensGameSolver from "../QueensGameSolver";
 import { QueensGridCell } from "../../utils/grid/QueensGridCell";
-import { gridToAscii } from "../../utils/grid-to-ascii";
-const STATE_CHAR_MAP = {
-  empty: "○",
-  queen: "♛",
-  cross: "×",
-};
 
 describe("QueensGameSolver", () => {
   it("Should Solve Game 1", () => {
@@ -418,13 +412,12 @@ describe("QueensGameSolver", () => {
           new QueensGridCell(cell.col, cell.row, cell.color, cell.cellState)
       )
     );
-    const realSolvedGrid = structuredClone(processedGrid);
 
-    const solver = new QueensGameSolver();
-    /**
-     * @type {QueensGridCell[][]}
-     */
-    const solvedGrid = solver.getSolvedGrid(processedGrid);
+    const realSolvedGrid = structuredClone(processedGrid).map((row) =>
+      row.map(
+        (cell) => new QueensGridCell(cell.col, cell.row, cell.color, "cross")
+      )
+    );
 
     // 0, 5
     realSolvedGrid[0][5] = new QueensGridCell(
@@ -482,11 +475,13 @@ describe("QueensGameSolver", () => {
       realSolvedGrid[7][1].color,
       "queen"
     );
-    // console.log("Solved Grid: ", gridToAscii(solvedGrid, STATE_CHAR_MAP));
-    // console.log(
-    //   "Real Solved Grid: ",
-    //   gridToAscii(realSolvedGrid, STATE_CHAR_MAP)
-    // );
-    expect(false).toEqual(true);
+
+    const solver = new QueensGameSolver();
+    /**
+     * @type {QueensGridCell[][]}
+     */
+    const solvedGrid = solver.getSolvedGrid(processedGrid);
+
+    expect(solvedGrid).toEqual(realSolvedGrid);
   });
 });
