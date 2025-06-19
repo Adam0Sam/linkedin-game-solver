@@ -1,13 +1,6 @@
-import { AbstractClass, NotImplementedError } from "../utils/AbstractClass";
+import { AbstractClass, NotImplementedError } from "../utils/AbstractClass.js";
 
 export class AbstractGameSolver extends AbstractClass {
-  constructor() {
-    super();
-    /**
-     * @type {GridCell[]}
-     */
-    this.gridClicks = [];
-  }
   /**
    * @abstract
    * @param {GridCell} cell
@@ -39,7 +32,7 @@ export class AbstractGameSolver extends AbstractClass {
    * @param {GridCell[][]} grid
    * @returns {GridCell[][]}
    */
-  getGridClicks(grid) {
+  getSolvedGrid(grid) {
     throw new NotImplementedError("getClickPlacements");
   }
   /**
@@ -51,6 +44,6 @@ export class AbstractGameSolver extends AbstractClass {
       throw new Error("Invalid game grid provided.");
     }
 
-    return this.getGridClicks(grid);
+    return this.getSolvedGrid(grid);
   }
 }

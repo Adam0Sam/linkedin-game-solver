@@ -2,9 +2,10 @@
   "name": "linkedin-game-solver",
   "version": "1.0.0",
   "main": "content-script.js",
+  "type": "module",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "npm run test --watch"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "homepage": "https://github.com/Adam0Sam/linkedin-game-solver#readme",
   "description": "",
   "devDependencies": {
+    "babel-jest": "^29.7.0",
     "jest": "^29.7.0"
   }
 }

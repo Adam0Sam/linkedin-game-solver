@@ -14,4 +14,11 @@ export class GridCell {
      */
     this.row = row;
   }
+
+  /**
+   * @returns {string}
+   */
+  toString() {
+    return `${this.col},${this.row}`;
+  }
 }
