@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     try {
       const gameParser = await gameRegistry.getParser(request.gameType);
       console.log("gameParser", gameParser);
-      const gameGrid = await gameParser.extractGameGridFromHtml(
+      const gameGrid = await gameParser.parse(
         document.documentElement.outerHTML
       );
 

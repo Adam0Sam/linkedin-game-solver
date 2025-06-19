@@ -46,13 +46,13 @@ export default class QueensGameParser extends AbstractGameParser {
       const cellIdx = cellElement.dataset.cellIdx;
       const cellCol = cellIdx % columns;
       const cellRow = Math.floor(cellIdx / columns);
-      const color = cellElement.classList[1].split("-")[2];
+      const color = parseInt(cellElement.classList[1].split("-")[2], 10);
 
       grid[cellRow][cellCol] = new QueensGridCell(
         cellCol,
         cellRow,
         color,
-        false
+        "empty"
       );
     }
 

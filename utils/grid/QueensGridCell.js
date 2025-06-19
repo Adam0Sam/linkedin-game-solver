@@ -4,18 +4,18 @@ export class QueensGridCell extends GridCell {
   /**
    * @param {number} col
    * @param {number} row
-   * @param {string} colorGroup
-   * @param {boolean} isQueen
+   * @param {number} color
+   * @param {"queen"|"cross"|"empty"} cellState
    */
-  constructor(col, row, colorGroup, isQueen) {
+  constructor(col, row, color, cellState) {
     super(col, row);
     /**
      * @type {number}
      */
-    this.colorGroup = colorGroup;
+    this.color = color;
     /**
-     * @type {boolean}
+     * @type {"queen"|"cross"|"empty"}
      */
-    this.isQueen = isQueen;
+    this.cellState = cellState;
   }
 }

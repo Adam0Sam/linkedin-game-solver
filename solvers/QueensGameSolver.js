@@ -1,116 +1,80 @@
-import { AbstractGameSolver } from "./AbstractGameSolver.js";
-
-/**
- * Queens game solver
- */
-export default class QueensGameSolver extends AbstractGameSolver {
-  constructor() {
-    super("queens");
+import { QueensGridCell } from "../utils/grid/QueensGridCell";
+import { AbstractGameSolver } from "./AbstractGameSolver";
+class ColorGroup {
+  constructor(color) {
+    /**
+     * @type {number}
+     */
+    this.color = color;
+    /**
+     * @type {QueensGridCell[]}
+     */
+    this.cells = [];
   }
 
   /**
-   * Solves the Queens game
-   * @param {object} gameData - Queens game data
-   * @returns {Promise<object>} Solution instructions
+   * @param {QueensGridCell} cell
    */
-  async solve(gameData) {
-    // Validate game data
-    this.validateGameData(gameData);
-
-    // Prepare game data for solving
-    const preparedData = this.prepareGameData(gameData);
-
-    // Solve using N-Queens algorithm
-    const solution = this.solveQueens(preparedData);
-
-    // Format solution
-    return this.formatSolution(solution);
+  appendCell(cell) {
+    this.cells.push(cell);
   }
 
   /**
-   * Validates that the game data is sufficient for solving
-   * @param {object} gameData - Queens game data
-   * @returns {boolean} True if game data is valid
+   * @returns {number}
    */
-  validateGameData(gameData) {
-    if (!gameData || !gameData.columns || !gameData.rows) {
-      throw new Error("Invalid game data: missing dimensions");
+  getSize() {
+    return this.cells.length;
+  }
+
+  getFirstEmptyCell() {
+    for (const cell of this.cells) {
+      if (cell.cellState === "empty") {
+        return cell;
+      }
     }
-    return true;
+    return null;
+  }
+}
+
+export default class QueensGameSolver extends AbstractGameSolver {
+  /**
+   * @param {QueensGridCell} cell
+   * @returns {boolean}
+   */
+  isInstanceOfGameSpecificCell(cell) {
+    return cell instanceof QueensGridCell;
   }
 
   /**
-   * Prepares the game data for solving
-   * @param {object} gameData - Raw game data
-   * @returns {object} Processed game data
+   * @param {QueensGridCell[][]} grid
+   * @returns {Map<number, ColorGroup>}
    */
-  prepareGameData(gameData) {
-    const { columns, rows, gridCells } = gameData;
+  #getColorGroupMap(grid) {
+    /**
+     * @type {Map<number, ColorGroup>}
+     */
+    const colorGroupMap = new Map();
 
-    // Create a 2D grid representation
-    const grid = Array(rows)
-      .fill()
-      .map(() => Array(columns).fill(0));
-
-    // Mark existing queens
-    if (gridCells) {
-      for (const cell of gridCells) {
-        if (cell.isQueen) {
-          grid[cell.row][cell.col] = 1;
+    for (const row of grid) {
+      for (const cell of row) {
+        if (!colorGroupMap.has(cell.color)) {
+          colorGroupMap.set(cell.color, new ColorGroup(cell.color));
         }
+        colorGroupMap.get(cell.color).appendCell(cell);
       }
     }
 
-    return { grid, columns, rows };
+    return colorGroupMap;
   }
 
   /**
-   * Solves the N-Queens problem
-   * @private
-   * @param {object} preparedData - Prepared game data
-   * @returns {object} Raw solution
+   * @param {QueensGridCell[][]} gameGrid
+   * @returns {GridCell[]}
    */
-  solveQueens(preparedData) {
-    const { grid, columns, rows } = preparedData;
-
-    // This is a simplified placeholder for the actual N-Queens algorithm
-    // In a real implementation, this would use backtracking or another algorithm
-    // to find a valid queen placement
-
-    const solution = [];
-
-    // For demonstration, we'll just place queens in a simple pattern
-    // (This won't be a valid solution for the actual game)
-    for (let i = 0; i < rows; i++) {
-      solution.push({ row: i, col: i % columns });
-    }
-
-    return { queenPlacements: solution };
-  }
-
-  /**
-   * Formats the solution into instructions
-   * @param {object} solution - Raw solution
-   * @returns {object} Formatted solution instructions
-   */
-  formatSolution(solution) {
-    const { queenPlacements } = solution;
-
-    // Format the solution as a sequence of moves
-    const moves = queenPlacements.map((placement, index) => {
-      return {
-        step: index + 1,
-        action: "placeQueen",
-        position: {
-          row: placement.row,
-          col: placement.col,
-        },
-      };
-    });
-
-    return {
-      type: this.gameType,
-      instructions: moves,
-    };
+  getGridClicks(grid) {
+    const colorGroupMap = this.#getColorGroupMap(grid);
+    const sortedColorGroups = Array.from(colorGroupMap.values()).sort(
+      (a, b) => b.getSize() - a.getSize()
+    );
   }
 }

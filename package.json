@@ -1,0 +1,24 @@
+{
+  "name": "linkedin-game-solver",
+  "version": "1.0.0",
+  "main": "content-script.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adam0Sam/linkedin-game-solver.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adam0Sam/linkedin-game-solver/issues"
+  },
+  "homepage": "https://github.com/Adam0Sam/linkedin-game-solver#readme",
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

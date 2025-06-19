@@ -1,65 +1,56 @@
-/**
- * AbstractGameSolver serves as a template for all game solvers.
- * This class defines the common interface and provides shared functionality
- * that all game solvers should implement.
- *
- * @abstract
- */
-export class AbstractGameSolver {
+import { AbstractClass, NotImplementedError } from "../utils/AbstractClass";
+
+export class AbstractGameSolver extends AbstractClass {
+  constructor() {
+    super();
+    /**
+     * @type {GridCell[]}
+     */
+    this.gridClicks = [];
+  }
   /**
-   * Constructor for the AbstractGameSolver
-   * @param {string} gameType - Type identifier for the game
+   * @abstract
+   * @param {GridCell} cell
+   * @returns {boolean}
    */
-  constructor(gameType) {
-    if (this.constructor === AbstractGameSolver) {
-      throw new Error("AbstractGameSolver cannot be instantiated directly");
+  isInstanceOfGameSpecificCell(cell) {
+    throw new NotImplementedError("isInstanceOfGameSpecificCell");
+  }
+
+  /**
+   * @param {GridCell[][]} gameGrid
+   * @returns {boolean}
+   */
+  isGameGridValid(gameGrid) {
+    if (!Array.isArray(gameGrid) || gameGrid.length === 0) {
+      return false;
     }
-    this.gameType = gameType;
+
+    return gameGrid.every((row) => {
+      if (!Array.isArray(row) || row.length === 0) {
+        return false;
+      }
+      return row.every((cell) => this.isInstanceOfGameSpecificCell(cell));
+    });
   }
 
   /**
-   * Solves the game based on provided game data
    * @abstract
-   * @param {object} gameData - Game data extracted from the HTML
-   * @returns {Promise<object>} - Solution instructions
+   * @param {GridCell[][]} grid
+   * @returns {GridCell[][]}
    */
-  async solve(gameData) {
-    throw new Error("Method 'solve' must be implemented by derived classes");
+  getGridClicks(grid) {
+    throw new NotImplementedError("getClickPlacements");
   }
-
   /**
-   * Validates that the game data is sufficient for solving
-   * @abstract
-   * @param {object} gameData - Game data extracted from the HTML
-   * @returns {boolean} - True if the game data is valid
+   * @param {GridCell[][]} grid
+   * @returns {GridCell[][]}
    */
-  validateGameData(gameData) {
-    throw new Error(
-      "Method 'validateGameData' must be implemented by derived classes"
-    );
-  }
+  solve(grid) {
+    if (!this.isGameGridValid(grid)) {
+      throw new Error("Invalid game grid provided.");
+    }
 
-  /**
-   * Prepares the game data for solving
-   * @abstract
-   * @param {object} gameData - Raw game data
-   * @returns {object} - Processed game data ready for solving
-   */
-  prepareGameData(gameData) {
-    throw new Error(
-      "Method 'prepareGameData' must be implemented by derived classes"
-    );
-  }
-
-  /**
-   * Formats the solution into instructions
-   * @abstract
-   * @param {object} solution - Raw solution data
-   * @returns {object} - Formatted solution instructions
-   */
-  formatSolution(solution) {
-    throw new Error(
-      "Method 'formatSolution' must be implemented by derived classes"
-    );
+    return this.getGridClicks(grid);
   }
 }

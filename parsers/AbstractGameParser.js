@@ -9,7 +9,7 @@ export class AbstractGameParser extends AbstractClass {
    * @param {string} htmlContent
    * @returns {GridCell[][]}
    */
-  extractGameGridFromHtml(htmlContent) {
+  parse(htmlContent) {
     const doc = this.#parseHtmlToDocument(htmlContent);
     const grid = this.extractGameGrid(doc);
 
