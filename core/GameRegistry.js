@@ -67,16 +67,24 @@ export class GameRegistry extends Singleton {
 
   /**
    * @param {string} gameType
+   * @returns {string}
+   * @private
+   */
+  #capitalizeGameType(gameType) {
+    return gameType.charAt(0).toUpperCase() + gameType.slice(1).toLowerCase();
+  }
+
+  /**
+   * @param {string} gameType
    * @returns {Promise<void>}
    */
   async #loadGamePlugin(gameType) {
-    let gameModule;
-
+    const capitalizedGameType = this.#capitalizeGameType(gameType);
     const parserModulePromise = import(
-      chrome.runtime.getURL(`parsers/${gameType}-parser.js`)
+      chrome.runtime.getURL(`parsers/${capitalizedGameType}GameParser.js`)
     );
     const solverModulePromise = import(
-      chrome.runtime.getURL(`solvers/${gameType}-solver.js`)
+      chrome.runtime.getURL(`solvers/${capitalizedGameType}GameSolver.js`)
     );
 
     const [parserModule, solverModule] = await Promise.all([
