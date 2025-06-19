@@ -1,5 +1,5 @@
 export default {
-  verbose: false,
+  verbose: true,
   moduleFileExtensions: ["js", "mjs"],
   testPathIgnorePatterns: ["/node_modules/"],
   transform: {},

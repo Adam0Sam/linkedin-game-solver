@@ -1,20 +1,35 @@
-import { Singleton } from "../utils/Singleton.js";
-
-export class GameRegistry extends Singleton {
+export class GameRegistry {
+  /**
+   * @type {Map<string, AbstractGameParser>}
+   * @private
+   */
   #parsers;
+  /**
+   * @type {Map<string, AbstractGameSolver>}
+   * @private
+   */
   #solvers;
+
+  /**
+   * @type {GameRegistry|null}
+   * @private
+   */
+  static #instance = null;
+
   constructor() {
-    super();
-
-    /**
-     * @type {Map<string, AbstractGameParser>}
-     */
+    if (GameRegistry.#instance) {
+      throw new Error("Attempted to invoke singletong constructor directly.");
+    }
     this.#parsers = new Map();
-
-    /**
-     * @type {Map<string, AbstractGameSolver>}
-     */
     this.#solvers = new Map();
+    GameRegistry.#instance = this;
+  }
+
+  static getInstance() {
+    if (!GameRegistry.#instance) {
+      GameRegistry.#instance = new GameRegistry();
+    }
+    return GameRegistry.#instance;
   }
 
   /**

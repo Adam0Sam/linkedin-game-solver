@@ -1,6 +1,5 @@
 import { AbstractGameSolver } from "./AbstractGameSolver.js";
 import { QueensGridCell } from "../utils/grid/QueensGridCell.js";
-import { queensGridToAsciiWithColors } from "../utils/queens-grid-to-ascii.js";
 
 class ColorGroup {
   constructor(color) {
