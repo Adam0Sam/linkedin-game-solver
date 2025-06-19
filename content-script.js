@@ -12,7 +12,7 @@ let gameRegistry;
 })();
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action !== "getGameData") return false; // Not handling this action
+  if (request.action !== "getGameGrid") return false; // Not handling this action
 
   if (!gameRegistry) {
     sendResponse({ error: "GameRegistry not initialized" });

@@ -1,18 +1,20 @@
 import { Singleton } from "../utils/Singleton.js";
 
 export class GameRegistry extends Singleton {
+  #parsers;
+  #solvers;
   constructor() {
     super();
 
     /**
      * @type {Map<string, AbstractGameParser>}
      */
-    this.parsers = new Map();
+    this.#parsers = new Map();
 
     /**
      * @type {Map<string, AbstractGameSolver>}
      */
-    this.solvers = new Map();
+    this.#solvers = new Map();
   }
 
   /**
@@ -20,7 +22,7 @@ export class GameRegistry extends Singleton {
    * @param {AbstractGameParser} parser
    */
   registerParser(gameType, parser) {
-    this.parsers.set(gameType, parser);
+    this.#parsers.set(gameType, parser);
   }
 
   /**
@@ -28,15 +30,19 @@ export class GameRegistry extends Singleton {
    * @param {AbstractGameSolver} solver
    */
   registerSolver(gameType, solver) {
-    this.solvers.set(gameType, solver);
+    this.#solvers.set(gameType, solver);
   }
 
   /**
    * @param {string} gameType
    * @returns {AbstractGameParser}
    */
-  getParser(gameType) {
-    const parser = this.parsers.get(gameType);
+  async getParser(gameType) {
+    const parser =
+      this.#parsers.get(gameType) ??
+      (await this.#loadGamePlugin(gameType).then(() =>
+        this.#parsers.get(gameType)
+      ));
     if (!parser) {
       throw new Error(`No parser registered for game type: ${gameType}`);
     }
@@ -47,8 +53,12 @@ export class GameRegistry extends Singleton {
    * @param {string} gameType
    * @returns {AbstractGameSolver}
    */
-  getSolver(gameType) {
-    const solver = this.solvers.get(gameType);
+  async getSolver(gameType) {
+    const solver =
+      this.#solvers.get(gameType) ??
+      (await this.#loadGamePlugin(gameType).then(() =>
+        this.#solvers.get(gameType)
+      ));
     if (!solver) {
       throw new Error(`No solver registered for game type: ${gameType}`);
     }
@@ -57,35 +67,14 @@ export class GameRegistry extends Singleton {
 
   /**
    * @param {string} gameType
-   * @returns {boolean}
-   */
-  hasParser(gameType) {
-    return this.parsers.has(gameType);
-  }
-
-  /**
-   * @param {string} gameType
-   * @returns {boolean}
-   */
-  hasSolver(gameType) {
-    return this.solvers.has(gameType);
-  }
-
-  /**
-   * @param {string} gameType
    * @returns {Promise<void>}
    */
-  async _loadGamePlugin(gameType) {
+  async #loadGamePlugin(gameType) {
     let gameModule;
 
-    try {
-      const gameModulePath = `games/${gameType}.js`;
-      const gameModuleUrl = chrome.runtime.getURL(gameModulePath);
-      gameModule = await import(gameModuleUrl);
-    } catch (error) {
-      console.error(`Failed to load game module for ${gameType}:`, error);
-      throw error;
-    }
+    const gameModulePath = `games/${gameType}.js`;
+    const gameModuleUrl = chrome.runtime.getURL(gameModulePath);
+    gameModule = await import(gameModuleUrl);
 
     const { parser, solver } = gameModule;
 

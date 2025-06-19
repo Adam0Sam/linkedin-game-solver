@@ -1,37 +1,22 @@
+import { AbstractClass, NotImplementedError } from "../utils/AbstractClass.js";
+import { GridCell } from "../utils/grid/GridCell.js";
+
 /**
  * @abstract
  */
-export class AbstractGameParser {
-  /**
-   * @param {string} gameType - Type identifier for the game
-   */
-  constructor(gameType) {
-    if (this.constructor === AbstractGameParser) {
-      throw new Error("AbstractGameParser cannot be instantiated directly");
-    }
-    this.gameType = gameType;
-  }
-
+export class AbstractGameParser extends AbstractClass {
   /**
    * @param {string} htmlContent
-   * @returns {object}
+   * @returns {{
+   *  type: string,
+   *  grid: GridCell[][]
+   * }}
    */
-  parseHtml(htmlContent) {
-    try {
-      const doc = this._parseHtmlToDocument(htmlContent);
-      const metadata = this.extractGameMetadata(doc);
-      const gameState = this.extractGameState(doc, metadata);
+  extractGameGridFromHtml(htmlContent) {
+    const doc = this.#parseHtmlToDocument(htmlContent);
+    const grid = this.extractGameGrid(doc);
 
-      return {
-        type: this.gameType,
-        ...metadata,
-        ...gameState,
-      };
-    } catch (error) {
-      throw new Error(
-        `Failed to parse ${this.gameType} game: ${error.message}`
-      );
-    }
+    return grid;
   }
 
   /**
@@ -40,31 +25,27 @@ export class AbstractGameParser {
    * @throws {Error}
    */
   validateDocument(doc) {
-    throw new Error(
-      "Method 'validateDocument' must be implemented by derived classes"
-    );
+    if (!this.getGridElement(doc)) {
+      throw new Error("Game grid not found in the HTML content.");
+    }
   }
 
   /**
    * @abstract
    * @param {Document} doc
-   * @returns {object}
+   * @returns {GridCell[]}
    */
-  extractGameMetadata(doc) {
-    throw new Error(
-      "Method 'extractGameMetadata' must be implemented by derived classes"
-    );
+  extractGameGrid(doc) {
+    throw new NotImplementedError("extractGameData");
   }
 
   /**
    * @abstract
    * @param {Document} doc
-   * @returns {object}
+   * @returns {HTMLElement}
    */
-  extractGameState(doc) {
-    throw new Error(
-      "Method 'extractGameState' must be implemented by derived classes"
-    );
+  getGridElement(doc) {
+    throw new NotImplementedError("getGridElement");
   }
 
   /**
@@ -73,7 +54,7 @@ export class AbstractGameParser {
    * @returns {Document}
    * @throws {Error}
    */
-  _parseHtmlToDocument(htmlContent) {
+  #parseHtmlToDocument(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
     this.validateDocument(doc);

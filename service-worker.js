@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener((request) => {
 
     chrome.tabs.sendMessage(
       tabs[0].id,
-      { action: "getGameData", gameType: gameType },
+      { action: "getGameGrid", gameType: gameType },
       (response) => {
         console.log("Game data received:", response);
       }

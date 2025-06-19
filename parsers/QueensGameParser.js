@@ -1,60 +1,55 @@
 import { AbstractGameParser } from "./AbstractGameParser.js";
-import { GridCell } from "../utils/GridCell.js";
+import { QueensGridCell } from "../utils/grid/QueensGridCell.js";
 
 export class QueensGameParser extends AbstractGameParser {
   constructor() {
-    super("queens");
+    super();
+    /**
+     * @type {HTMLElement|null}
+     */
+    this.gridElement = null;
   }
 
   /**
    * @param {Document} doc
-   * @throws {Error}
+   * @returns {HTMLElement}
    */
-  validateDocument(doc) {
-    const queensGrid = doc.querySelector("#queens-grid");
-    if (!queensGrid) {
-      throw new Error("Queens grid not found in the HTML content.");
+  getGridElement(doc) {
+    if (!this.gridElement) {
+      this.gridElement = doc.querySelector("#queens-grid");
     }
+    return this.gridElement;
   }
 
   /**
-   * Extracts Queens game metadata
-   * @param {Document} doc - Parsed HTML document
-   * @returns {object} - Game metadata including grid dimensions
+   * @param {Document} doc
+   * @param {Object} metadata
+   * @returns {QueensGridCell[][]}
    */
-
-  extractGameMetadata(doc) {
-    const queensGrid = doc.querySelector("#queens-grid");
+  extractGameGrid(doc) {
+    const queensGrid = this.getGridElement(doc);
     const computedStyle = getComputedStyle(queensGrid);
-
     const columns = parseInt(computedStyle.getPropertyValue("--cols"), 10);
     const rows = parseInt(computedStyle.getPropertyValue("--rows"), 10);
 
-    return { columns, rows };
-  }
+    const grid = Array.from({ length: rows }, () =>
+      Array.from({ length: columns })
+    );
 
-  /**
-   * Extracts the current state of the Queens game
-   * @param {Document} doc - Parsed HTML document
-   * @param {object} metadata - Game metadata including dimensions
-   * @returns {object} - Current game state including grid cells
-   */
-  extractGameState(doc, metadata) {
-    const { columns, rows } = metadata;
-    const gridCells = [];
-    const queensGrid = doc.querySelector("#queens-grid");
-
-    // Extract cell data from the grid
-    const cellElements = queensGrid.querySelectorAll(".cell");
+    const cellElements = queensGrid.querySelectorAll("queens-cell-with-border");
     for (const cellElement of cellElements) {
-      const col = parseInt(cellElement.dataset.col, 10);
-      const row = parseInt(cellElement.dataset.row, 10);
-      const color = cellElement.dataset.color;
-      const isQueen = cellElement.classList.contains("queen");
-
-      gridCells.push(new GridCell(col, row, color, isQueen));
+      const cellIdx = cellElement.dataset.cellIdx;
+      const cellRow = cellIdx % columns;
+      const cellCol = Math.floor(cellIdx / columns);
+      const color = cellElement.classList[1].split("-")[2];
+      grid[cellRow][cellCol] = new QueensGridCell(
+        cellCol,
+        cellRow,
+        color,
+        false
+      );
     }
 
-    return { gridCells };
+    return grid;
   }
 }
