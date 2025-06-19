@@ -1,6 +1,12 @@
 import QueensGameSolver from "../QueensGameSolver";
 import { QueensGridCell } from "../../utils/grid/QueensGridCell";
 
+const STATE_CHAR_MAP = {
+  empty: "○",
+  queen: "♛",
+  cross: "×",
+};
+
 describe("QueensGameSolver", () => {
   it("Should Solve Game 1", () => {
     const rawGrid = [
@@ -476,7 +482,6 @@ describe("QueensGameSolver", () => {
       realSolvedGrid[7][1].color,
       "queen"
     );
-
     expect(solvedGrid).toEqual(realSolvedGrid);
   });
 });
