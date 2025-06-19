@@ -84,8 +84,8 @@ export class GameRegistry extends Singleton {
       solverModulePromise,
     ]);
 
-    const parser = parserModule.default;
-    const solver = solverModule.default;
+    const parser = new parserModule.default();
+    const solver = new solverModule.default();
 
     if (!parser) {
       throw new Error(`Game module for ${gameType} is missing a parser export`);

@@ -7,10 +7,7 @@ import { GridCell } from "../utils/grid/GridCell.js";
 export class AbstractGameParser extends AbstractClass {
   /**
    * @param {string} htmlContent
-   * @returns {{
-   *  type: string,
-   *  grid: GridCell[][]
-   * }}
+   * @returns {GridCell[][]}
    */
   extractGameGridFromHtml(htmlContent) {
     const doc = this.#parseHtmlToDocument(htmlContent);
