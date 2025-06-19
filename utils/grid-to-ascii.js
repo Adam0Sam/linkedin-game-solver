@@ -4,7 +4,7 @@
  * @param {Record} stateCharMap
  * @returns
  */
-function gridToAscii(grid, stateCharMap) {
+export function gridToAscii(grid, stateCharMap) {
   let ascii = "\n";
   for (const row of grid) {
     for (const cell of row) {

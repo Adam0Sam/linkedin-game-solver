@@ -1,5 +1,11 @@
 import { AbstractGameSolver } from "./AbstractGameSolver.js";
 import { QueensGridCell } from "../utils/grid/QueensGridCell.js";
+import { gridToAscii } from "../utils/grid-to-ascii.js";
+const STATE_CHAR_MAP = {
+  empty: "○",
+  queen: "♛",
+  cross: "×",
+};
 
 class ColorGroup {
   constructor(color) {
@@ -7,24 +13,36 @@ class ColorGroup {
      * @type {number}
      */
     this.color = color;
+
     /**
-     * @type {QueensGridCell[]}
+     * @type {Map<string, QueensGridCell>}
      */
-    this.cells = [];
+    this.cellIdMap = new Map();
+
+    /**
+     * @type {Set<string>}
+     */
+    this.cellIds = new Set();
+
+    /**
+     * @type {Set<string>}
+     */
+    this.visitedCellIds = new Set();
   }
 
   /**
    * @param {QueensGridCell} cell
    */
   appendCell(cell) {
-    this.cells.push(cell);
+    this.cellIds.add(cell.toString());
+    this.cellIdMap.set(cell.toString(), cell);
   }
 
   /**
    * @returns {number}
    */
   getSize() {
-    return this.cells.length;
+    return this.cellIdMap.values().length;
   }
 
   /**
@@ -32,77 +50,68 @@ class ColorGroup {
    * @param {Set<string>} visitedSet
    * @returns {QueensGridCell|null}
    */
-  getFirstCell(isEmpty, visitedSet) {
-    for (const cell of this.cells) {
+  getFirstCell(isEmpty, isUnvisited) {
+    for (const cell of this.cellIdMap.values()) {
       let meetsConditions = true;
       if (isEmpty && cell.cellState !== "empty") meetsConditions = false;
-      if (visitedSet.has(cell.toString())) meetsConditions = false;
+      if (isUnvisited && this.visitedCellIds.has(cell.toString()))
+        meetsConditions = false;
       if (meetsConditions) return cell;
     }
     return null;
   }
 
-  #containsCell(targetCell) {
-    return this.cells.some((cell) => cell.toString() === targetCell.toString());
+  /**
+   * @param {QueensGridCell} cell
+   * @throws {Error}
+   * @private
+   */
+  #validateCell(cell) {
+    const cellId = cell.toString();
+    if (this.visitedCellIds.has(cellId)) {
+      throw new Error(
+        `Cell ${cellId} has already been visited in this color group.`
+      );
+    }
   }
 
   /**
    * @param {QueensGridCell} cell
+   * @param {"queen"|"empty"|"cross"} state
+   * @throws {Error}
    */
-  placeQueen(cell) {
-    if (!this.#containsCell(cell)) {
-      throw new Error(
-        `Cell ${cell.toString()} is not part of this color group.`
-      );
-    }
-    cell.cellState = "queen";
+  setCellState(cell, state) {
+    this.#validateCell(cell);
+    const internalCell = this.cellIdMap.get(cell.toString());
+    internalCell.cellState = state;
   }
 
   /**
    * @param {QueensGridCell} cell
+   * @throws {Error}
    */
-  removeQueen(cell) {
-    if (!this.#containsCell(cell)) {
-      throw new Error(
-        `Cell ${cell.toString()} is not part of this color group.`
-      );
-    }
-    cell.cellState = "empty";
-  }
-
-  /**
-   * @param {Set<string>} visitedSet
-   * @returns {boolean}
-   */
-  containsUnvisitedCells(visitedSet) {
-    return this.cells.some(
-      (cell) => cell.cellState === "empty" && !visitedSet.has(cell.toString())
-    );
-  }
-
-  /**
-   * @returns {boolean}
-   */
-  containsEmptyCells() {
-    return this.cells.some((cell) => cell.cellState === "empty");
+  markAsVisited(cell) {
+    this.#validateCell(cell);
+    this.visitedCellIds.add(cell.toString());
   }
 
   /**
    * @returns {boolean}
    */
   containsQueen() {
-    return this.cells.some((cell) => cell.cellState === "queen");
+    return this.cellIdMap.values().some((cell) => cell.cellState === "queen");
   }
 }
 
 export default class QueensGameSolver extends AbstractGameSolver {
-  constructor() {
-    super();
-    /**
-     * @type {ColorGroup[]}
-     */
-    this.sortedColorGroups = [];
-  }
+  /**
+   * @type {Map<number, ColorGroup>}
+   */
+  #colorGroupMap;
+  /**
+   * @type {string[]}
+   */
+  #sortedColors;
 
   /**
    * @param {QueensGridCell} cell
@@ -114,9 +123,9 @@ export default class QueensGameSolver extends AbstractGameSolver {
 
   /**
    * @param {QueensGridCell[][]} grid
-   * @returns {ColorGroup[]}
+   * @returns {Map<number, ColorGroup>}
    */
-  #getSortedColorGroups(grid) {
+  getColorGroupMap(grid) {
     /**
      * @type {Map<number, ColorGroup>}
      */
@@ -131,9 +140,7 @@ export default class QueensGameSolver extends AbstractGameSolver {
       }
     }
 
-    return Array.from(colorGroupMap.values()).sort(
-      (a, b) => b.getSize() - a.getSize()
-    );
+    return colorGroupMap;
   }
 
   /**
@@ -142,39 +149,36 @@ export default class QueensGameSolver extends AbstractGameSolver {
    * @param {QueensGridCell[][]} gridSnapshot
    * @returns {QueensGridCell[][]}
    */
-  #getCrossedOutSnapshot(cell, gridSnapshot) {
+  #getGridWithQueen(cell, gridSnapshot) {
     const newSnapshot = structuredClone(gridSnapshot);
-    const maxRow = gridSnapshot.length;
-    const maxCol = gridSnapshot[0].length;
-    const maxDistance = Math.max(maxRow, maxCol);
+    newSnapshot[cell.row][cell.col].cellState = "queen";
+    const gridSize = gridSnapshot.length;
 
-    // Mark entire row and column
-    for (let i = 0; i < maxRow; i++) {
-      if (i !== cell.row) markCell(i, cell.col);
-    }
-    for (let j = 0; j < maxCol; j++) {
-      if (j !== cell.col) markCell(cell.row, j);
-    }
+    const crossOutCell = (row, col) => {
+      if (row === cell.row && col === cell.col) return;
 
-    // Mark full diagonals
-    for (let step = 1; step <= maxDistance; step++) {
-      // Top-left to bottom-right
-      markCell(cell.row - step, cell.col - step);
-      markCell(cell.row + step, cell.col + step);
-
-      // Top-right to bottom-left
-      markCell(cell.row - step, cell.col + step);
-      markCell(cell.row + step, cell.col - step);
-    }
-
-    function markCell(row, col) {
       if (
         row >= 0 &&
         row < newSnapshot.length &&
         col >= 0 &&
         col < newSnapshot[0].length
       ) {
-        newSnapshot[row][col].cellState = "cross";
+        const snapshotCell = newSnapshot[row][col];
+        snapshotCell.cellState = "cross";
+        const snapshotCellColor = snapshotCell.color;
+        const colorGroup = this.#colorGroupMap.get(snapshotCellColor);
+        colorGroup.setCellState(snapshotCell, "cross");
+      }
+    };
+
+    for (let i = 0; i < gridSize; i++) {
+      crossOutCell(i, cell.col);
+      crossOutCell(cell.row, i);
+    }
+
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        crossOutCell(cell.row + i, cell.col + j);
       }
     }
 
@@ -186,7 +190,7 @@ export default class QueensGameSolver extends AbstractGameSolver {
    * @returns {boolean}
    */
   #hasFoundSolution() {
-    return this.sortedColorGroups.every((group) => group.containsQueen());
+    return this.#colorGroupMap.values().every((group) => group.containsQueen());
   }
 
   /**
@@ -195,22 +199,22 @@ export default class QueensGameSolver extends AbstractGameSolver {
    * @returns {QueensGridCell[][]|null}
    */
   visitColorGroup(colourGroupIndex, gridSnapshot) {
-    const colorGroup = this.sortedColorGroups[colourGroupIndex];
-    const visitedCells = new Set();
+    console.log(`Visiting color group: ${colourGroupIndex}`);
+    const color = this.#sortedColors[colourGroupIndex];
+    const colorGroup = this.#colorGroupMap.get(color);
 
-    if (!colorGroup.containsEmptyCells()) {
-      return null;
-    }
+    let cell = colorGroup.getFirstCell(true, true);
+    while (cell) {
+      console.log("Visiting Cell: ", cell.toString());
+      colorGroup.setCellState(cell, "queen");
+      colorGroup.markAsVisited(cell);
+      const newGridSnapshot = this.#getGridWithQueen(cell, gridSnapshot);
+      console.log(
+        "Grid Snapshot: ",
+        gridToAscii(newGridSnapshot, STATE_CHAR_MAP)
+      );
 
-    while (colorGroup.containsUnvisitedCells(visitedCells)) {
-      const cell = colorGroup.getFirstCell(true, visitedCells);
-      if (!cell) break;
-
-      visitedCells.add(cell.toString());
-      colorGroup.placeQueen(cell);
-      const newGridSnapshot = this.#getCrossedOutSnapshot(cell, gridSnapshot);
-
-      if (colourGroupIndex >= this.sortedColorGroups.length - 1) {
+      if (colourGroupIndex >= this.#sortedColors.length - 1) {
         if (this.#hasFoundSolution()) {
           return newGridSnapshot;
         }
@@ -224,7 +228,8 @@ export default class QueensGameSolver extends AbstractGameSolver {
         }
       }
 
-      colorGroup.removeQueen(cell);
+      colorGroup.setCellState(cell, "empty");
+      cell = colorGroup.getFirstCell(true, true);
     }
 
     return null;
@@ -235,7 +240,11 @@ export default class QueensGameSolver extends AbstractGameSolver {
    * @returns {QueensGridCell[][]}
    */
   getSolvedGrid(grid) {
-    this.sortedColorGroups = this.#getSortedColorGroups(grid);
+    this.#colorGroupMap = this.getColorGroupMap(grid);
+    this.#sortedColors = Array.from(this.colorGroupMap.values())
+      .sort((a, b) => a.getSize() - b.getSize())
+      .map((group) => group.color);
+
     return this.visitColorGroup(0, grid);
   }
 }

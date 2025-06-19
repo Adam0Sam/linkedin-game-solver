@@ -1,6 +1,6 @@
 import QueensGameSolver from "../QueensGameSolver";
 import { QueensGridCell } from "../../utils/grid/QueensGridCell";
-
+import { gridToAscii } from "../../utils/grid-to-ascii";
 const STATE_CHAR_MAP = {
   empty: "○",
   queen: "♛",
@@ -482,6 +482,11 @@ describe("QueensGameSolver", () => {
       realSolvedGrid[7][1].color,
       "queen"
     );
-    expect(solvedGrid).toEqual(realSolvedGrid);
+    // console.log("Solved Grid: ", gridToAscii(solvedGrid, STATE_CHAR_MAP));
+    // console.log(
+    //   "Real Solved Grid: ",
+    //   gridToAscii(realSolvedGrid, STATE_CHAR_MAP)
+    // );
+    expect(false).toEqual(true);
   });
 });
