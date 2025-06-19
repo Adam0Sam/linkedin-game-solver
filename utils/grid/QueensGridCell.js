@@ -1,3 +1,5 @@
+import { GridCell } from "./GridCell.js";
+
 export class QueensGridCell extends GridCell {
   /**
    * @param {number} col

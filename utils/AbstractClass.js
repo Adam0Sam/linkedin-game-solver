@@ -1,4 +1,4 @@
-class NotImplementedError extends Error {
+export class NotImplementedError extends Error {
   /**
    * @param {string} methodName
    */
@@ -15,7 +15,7 @@ class AbstractClassConstructorError extends Error {
   }
 }
 
-class AbstractClass {
+export class AbstractClass {
   constructor() {
     const constructedClass = this.constructor;
 

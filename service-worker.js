@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener((request) => {
       tabs[0].id,
       { action: "getGameGrid", gameType: gameType },
       (response) => {
-        console.log("Game data received:", response);
+        console.log("Game grid received:", response);
       }
     );
   });

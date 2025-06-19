@@ -1,7 +1,7 @@
 import { AbstractGameParser } from "./AbstractGameParser.js";
 import { QueensGridCell } from "../utils/grid/QueensGridCell.js";
 
-export class QueensGameParser extends AbstractGameParser {
+export default class QueensGameParser extends AbstractGameParser {
   constructor() {
     super();
     /**

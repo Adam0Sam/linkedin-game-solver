@@ -1,5 +1,3 @@
-import { Singleton } from "../utils/Singleton.js";
-
 /**
  * Event bus for communication between components
  */

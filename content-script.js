@@ -2,6 +2,7 @@ let gameRegistry;
 
 (async () => {
   try {
+    console.log;
     const registryModule = await import(
       chrome.runtime.getURL("core/GameRegistry.js")
     );
@@ -12,7 +13,7 @@ let gameRegistry;
 })();
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action !== "getGameGrid") return false; // Not handling this action
+  if (request.action !== "getGameGrid") return false;
 
   if (!gameRegistry) {
     sendResponse({ error: "GameRegistry not initialized" });
@@ -21,20 +22,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   (async () => {
     try {
-      const gameParser = gameRegistry.getParser(request.gameType);
-
-      const gameData = await gameParser.parseHtml(
+      const gameParser = await gameRegistry.getParser(request.gameType);
+      console.log("gameParser", gameParser);
+      const gameGrid = await gameParser.extractGameGridFromHtml(
         document.documentElement.outerHTML
       );
 
-      sendResponse(gameData);
+      sendResponse(gameGrid);
     } catch (error) {
       console.error("Error processing game data:", error);
       sendResponse({ error: error.message });
     }
   })();
-
-  return true; // Keep the message channel open for the async response
 
   return true;
 });

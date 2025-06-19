@@ -3,7 +3,7 @@ import { AbstractGameSolver } from "./AbstractGameSolver.js";
 /**
  * Queens game solver
  */
-export class QueensGameSolver extends AbstractGameSolver {
+export default class QueensGameSolver extends AbstractGameSolver {
   constructor() {
     super("queens");
   }

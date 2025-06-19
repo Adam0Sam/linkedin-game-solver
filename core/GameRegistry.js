@@ -72,11 +72,20 @@ export class GameRegistry extends Singleton {
   async #loadGamePlugin(gameType) {
     let gameModule;
 
-    const gameModulePath = `games/${gameType}.js`;
-    const gameModuleUrl = chrome.runtime.getURL(gameModulePath);
-    gameModule = await import(gameModuleUrl);
+    const parserModulePromise = import(
+      chrome.runtime.getURL(`parsers/${gameType}-parser.js`)
+    );
+    const solverModulePromise = import(
+      chrome.runtime.getURL(`solvers/${gameType}-solver.js`)
+    );
 
-    const { parser, solver } = gameModule;
+    const [parserModule, solverModule] = await Promise.all([
+      parserModulePromise,
+      solverModulePromise,
+    ]);
+
+    const parser = parserModule.default;
+    const solver = solverModule.default;
 
     if (!parser) {
       throw new Error(`Game module for ${gameType} is missing a parser export`);
