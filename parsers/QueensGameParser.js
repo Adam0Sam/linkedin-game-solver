@@ -28,20 +28,26 @@ export default class QueensGameParser extends AbstractGameParser {
    */
   extractGameGrid(doc) {
     const queensGrid = this.getGridElement(doc);
-    const computedStyle = getComputedStyle(queensGrid);
-    const columns = parseInt(computedStyle.getPropertyValue("--cols"), 10);
-    const rows = parseInt(computedStyle.getPropertyValue("--rows"), 10);
+
+    const inlineStyle = queensGrid.getAttribute("style");
+
+    const rows = inlineStyle.match(/--rows:\s*(\d+)/)[1];
+    const columns = inlineStyle.match(/--cols:\s*(\d+)/)[1];
 
     const grid = Array.from({ length: rows }, () =>
       Array.from({ length: columns })
     );
 
-    const cellElements = queensGrid.querySelectorAll("queens-cell-with-border");
+    const cellElements = queensGrid.querySelectorAll(
+      ".queens-cell-with-border"
+    );
+
     for (const cellElement of cellElements) {
       const cellIdx = cellElement.dataset.cellIdx;
-      const cellRow = cellIdx % columns;
-      const cellCol = Math.floor(cellIdx / columns);
+      const cellCol = cellIdx % columns;
+      const cellRow = Math.floor(cellIdx / columns);
       const color = cellElement.classList[1].split("-")[2];
+
       grid[cellRow][cellCol] = new QueensGridCell(
         cellCol,
         cellRow,
