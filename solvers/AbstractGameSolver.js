@@ -4,10 +4,11 @@ export class AbstractGameSolver extends AbstractClass {
   /**
    * @abstract
    * @param {GridCell} cell
-   * @returns {boolean}
+   * @returns {object}
+   * @throws {NotImplementedError}
    */
-  isInstanceOfGameSpecificCell(cell) {
-    throw new NotImplementedError("isInstanceOfGameSpecificCell");
+  toGameCell(cell) {
+    throw new NotImplementedError("toGameCell");
   }
 
   /**
@@ -23,7 +24,7 @@ export class AbstractGameSolver extends AbstractClass {
       if (!Array.isArray(row) || row.length === 0) {
         return false;
       }
-      return row.every((cell) => this.isInstanceOfGameSpecificCell(cell));
+      return row.every((cell) => this.toGameCell(cell));
     });
   }
 
@@ -40,10 +41,10 @@ export class AbstractGameSolver extends AbstractClass {
    * @returns {GridCell[][]}
    */
   solve(grid) {
-    if (!this.isGameGridValid(grid)) {
-      throw new Error("Invalid game grid provided.");
-    }
+    const parsedGrid = grid.map((row) =>
+      row.map((cell) => this.toGameCell(cell))
+    );
 
-    return this.getSolvedGrid(grid);
+    return this.getSolvedGrid(parsedGrid);
   }
 }

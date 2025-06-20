@@ -1,5 +1,5 @@
-import QueensGameParser from "../parsers/QueensGameParser";
-import QueensGameSolver from "../solvers/QueensGameSolver";
+import QueensGridParser from "../parsers/QueensGridParser.js";
+import QueensGameSolver from "../solvers/QueensGameSolver.js";
 
 export class GameRegistry {
   /**
@@ -14,7 +14,7 @@ export class GameRegistry {
   #solverMap;
   constructor() {
     this.#parserMap = {
-      queens: new QueensGameParser(),
+      queens: new QueensGridParser(),
     };
     this.#solverMap = {
       queens: new QueensGameSolver(),

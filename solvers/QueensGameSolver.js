@@ -180,11 +180,26 @@ export default class QueensGameSolver extends AbstractGameSolver {
   #sortedColors;
 
   /**
-   * @param {QueensGridCell} cell
-   * @returns {boolean}
+   * @param {object} cell
+   * @returns {QueensGridCell}
+   * @throws {Error}
    */
-  isInstanceOfGameSpecificCell(cell) {
-    return cell instanceof QueensGridCell;
+  toGameCell(cell) {
+    if (
+      !cell ||
+      typeof cell.col !== "number" ||
+      typeof cell.row !== "number" ||
+      typeof cell.color !== "number" ||
+      typeof cell.cellState !== "string"
+    ) {
+      throw new Error("Invalid cell object provided.");
+    }
+    return new QueensGridCell(
+      cell.col,
+      cell.row,
+      cell.color,
+      cell.cellState || "empty"
+    );
   }
 
   /**

@@ -1,6 +1,6 @@
 import { GameRegistry } from "./core/GameRegistry.js";
 
-function handleSolveGame(request, sendResponse) {
+function handleSolveGame(sendResponse) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const gameType = new URL(tabs[0].url).pathname.split("/")[2];
     const gameRegistry = new GameRegistry();
@@ -14,6 +14,7 @@ function handleSolveGame(request, sendResponse) {
           sendResponse({ error: response?.error || "Failed to get game grid" });
           return;
         }
+        console.log("Game grid received:", response.grid);
         const solutionGrid = solver.solve(response.grid);
 
         chrome.tabs.sendMessage(tabs[0].id, {
@@ -30,7 +31,7 @@ function handleSolveGame(request, sendResponse) {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "solveGame") {
-    handleSolveGame(request, sendResponse);
+    handleSolveGame(sendResponse);
     return true;
   }
 
