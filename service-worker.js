@@ -1,4 +1,4 @@
-import { GameRegistry } from "./core/DynamicGameRegistry.js";
+import { GameRegistry } from "./core/GameRegistry.js";
 
 function handleSolveGame(request, sendResponse) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

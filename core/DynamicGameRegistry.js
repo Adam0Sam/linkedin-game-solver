@@ -1,7 +1,7 @@
 /**
  * Currently unusable because service workers are forbidden from dynamically importing modules
  */
-export class GameRegistry {
+export class DynamicGameRegistry {
   /**
    * @type {Map<string, AbstractGameParser>}
    * @private
@@ -14,25 +14,25 @@ export class GameRegistry {
   #solvers;
 
   /**
-   * @type {GameRegistry|null}
+   * @type {DynamicGameRegistry|null}
    * @private
    */
   static #instance = null;
 
   constructor() {
-    if (GameRegistry.#instance) {
+    if (DynamicGameRegistry.#instance) {
       throw new Error("Attempted to invoke singletong constructor directly.");
     }
     this.#parsers = new Map();
     this.#solvers = new Map();
-    GameRegistry.#instance = this;
+    DynamicGameRegistry.#instance = this;
   }
 
   static getInstance() {
-    if (!GameRegistry.#instance) {
-      GameRegistry.#instance = new GameRegistry();
+    if (!DynamicGameRegistry.#instance) {
+      DynamicGameRegistry.#instance = new DynamicGameRegistry();
     }
-    return GameRegistry.#instance;
+    return DynamicGameRegistry.#instance;
   }
 
   /**
