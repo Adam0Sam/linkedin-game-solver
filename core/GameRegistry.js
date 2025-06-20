@@ -12,6 +12,11 @@ export class GameRegistry {
    * @private
    */
   #solverMap;
+  /**
+   * @type {{string, AbstractGameExecutor}}
+   * @private
+   */
+  #executorMap;
   constructor() {
     this.#parserMap = {
       queens: new QueensGridParser(),
@@ -19,6 +24,7 @@ export class GameRegistry {
     this.#solverMap = {
       queens: new QueensGameSolver(),
     };
+    this.#executorMap = {};
   }
 
   /**
@@ -34,5 +40,34 @@ export class GameRegistry {
    */
   getParser(gameType) {
     return this.#parserMap[gameType];
+  }
+
+  /**
+   * @param {string} gameType
+   * @param {AbstractGameExecutor} executor
+   */
+  getExecutor(gameType) {
+    return this.#executorMap[gameType];
+  }
+  /**
+   * @param {string} gameType
+   * @returns {boolean}
+   */
+  hasSolver(gameType) {
+    return this.#solverMap.hasOwnProperty(gameType);
+  }
+  /**
+   * @param {string} gameType
+   * @returns {boolean}
+   */
+  hasParser(gameType) {
+    return this.#parserMap.hasOwnProperty(gameType);
+  }
+  /**
+   * @param {string} gameType
+   * @returns {boolean}
+   */
+  hasExecutor(gameType) {
+    return this.#executorMap.hasOwnProperty(gameType);
   }
 }
