@@ -1,124 +1,38 @@
+import QueensGameParser from "../parsers/QueensGameParser";
+import QueensGameSolver from "../solvers/QueensGameSolver";
+
 export class GameRegistry {
   /**
-   * @type {Map<string, AbstractGameParser>}
+   * @type {{string, AbstractGameParser}}
    * @private
    */
-  #parsers;
+  #parserMap;
   /**
-   * @type {Map<string, AbstractGameSolver>}
+   * @type {{string, AbstractGameSolver}}
    * @private
    */
-  #solvers;
-
-  /**
-   * @type {GameRegistry|null}
-   * @private
-   */
-  static #instance = null;
-
+  #solverMap;
   constructor() {
-    if (GameRegistry.#instance) {
-      throw new Error("Attempted to invoke singletong constructor directly.");
-    }
-    this.#parsers = new Map();
-    this.#solvers = new Map();
-    GameRegistry.#instance = this;
-  }
-
-  static getInstance() {
-    if (!GameRegistry.#instance) {
-      GameRegistry.#instance = new GameRegistry();
-    }
-    return GameRegistry.#instance;
+    this.#parserMap = {
+      queens: new QueensGameParser(),
+    };
+    this.#solverMap = {
+      queens: new QueensGameSolver(),
+    };
   }
 
   /**
    * @param {string} gameType
    * @param {AbstractGameParser} parser
    */
-  registerParser(gameType, parser) {
-    this.#parsers.set(gameType, parser);
+  getSolver(gameType) {
+    return this.#solverMap[gameType];
   }
-
   /**
    * @param {string} gameType
-   * @param {AbstractGameSolver} solver
+   * @param {AbstractGameParser} parser
    */
-  registerSolver(gameType, solver) {
-    this.#solvers.set(gameType, solver);
-  }
-
-  /**
-   * @param {string} gameType
-   * @returns {AbstractGameParser}
-   */
-  async getParser(gameType) {
-    const parser =
-      this.#parsers.get(gameType) ??
-      (await this.#loadGamePlugin(gameType).then(() =>
-        this.#parsers.get(gameType)
-      ));
-    if (!parser) {
-      throw new Error(`No parser registered for game type: ${gameType}`);
-    }
-    return parser;
-  }
-
-  /**
-   * @param {string} gameType
-   * @returns {AbstractGameSolver}
-   */
-  async getSolver(gameType) {
-    const solver =
-      this.#solvers.get(gameType) ??
-      (await this.#loadGamePlugin(gameType).then(() =>
-        this.#solvers.get(gameType)
-      ));
-    if (!solver) {
-      throw new Error(`No solver registered for game type: ${gameType}`);
-    }
-    return solver;
-  }
-
-  /**
-   * @param {string} gameType
-   * @returns {string}
-   * @private
-   */
-  #capitalizeGameType(gameType) {
-    return gameType.charAt(0).toUpperCase() + gameType.slice(1).toLowerCase();
-  }
-
-  /**
-   * @param {string} gameType
-   * @returns {Promise<void>}
-   */
-  async #loadGamePlugin(gameType) {
-    const capitalizedGameType = this.#capitalizeGameType(gameType);
-    const parserModulePromise = import(
-      chrome.runtime.getURL(`parsers/${capitalizedGameType}GameParser.js`)
-    );
-    const solverModulePromise = import(
-      chrome.runtime.getURL(`solvers/${capitalizedGameType}GameSolver.js`)
-    );
-
-    const [parserModule, solverModule] = await Promise.all([
-      parserModulePromise,
-      solverModulePromise,
-    ]);
-
-    const parser = new parserModule.default();
-    const solver = new solverModule.default();
-
-    if (!parser) {
-      throw new Error(`Game module for ${gameType} is missing a parser export`);
-    }
-
-    if (!solver) {
-      throw new Error(`Game module for ${gameType} is missing a solver export`);
-    }
-
-    this.registerParser(gameType, parser);
-    this.registerSolver(gameType, solver);
+  getParser(gameType) {
+    return this.#parserMap[gameType];
   }
 }

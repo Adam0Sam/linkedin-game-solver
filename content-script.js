@@ -5,7 +5,7 @@ let gameRegistry;
     const registryModule = await import(
       chrome.runtime.getURL("core/GameRegistry.js")
     );
-    gameRegistry = registryModule.GameRegistry.getInstance();
+    gameRegistry = new registryModule.GameRegistry();
     console.log("LinkedIn Game Solver initialized");
   } catch (error) {
     console.error("Failed to initialize LinkedIn Game Solver:", error);
@@ -18,19 +18,14 @@ function handleGetGameGrid(request, sendResponse) {
     return false;
   }
 
-  (async () => {
-    try {
-      const gameParser = await gameRegistry.getParser(request.gameType);
-      const gameGrid = await gameParser.parse(
-        document.documentElement.outerHTML
-      );
+  try {
+    const gameParser = gameRegistry.getParser(request.gameType);
+    const gameGrid = gameParser.parse(document.documentElement.outerHTML);
 
-      sendResponse({ grid: gameGrid });
-    } catch (error) {
-      console.error("Error parsing game grid:", error);
-      sendResponse({ error: error.message });
-    }
-  })();
+    sendResponse({ grid: gameGrid });
+  } catch (error) {
+    sendResponse({ error: error.message });
+  }
 
   return true;
 }
@@ -38,7 +33,7 @@ function handleGetGameGrid(request, sendResponse) {
 function handleExecuteSolution(request, sendResponse) {
   (async () => {
     try {
-      console.log("Executing solution:", request.solution);
+      console.log("Executing solution:", request.solution, request.gameType);
       // TODO: Implement code to make the moves on the page
       // This would involve clicking on cells based on the solution
 
