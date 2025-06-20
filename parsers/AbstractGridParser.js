@@ -33,24 +33,27 @@ export class AbstractGridParser extends AbstractClass {
 
   /**
    * @param {string} htmlContent
+   * @param {boolean} [autoProcess=true]
    * @returns {GridCell[][]}
    */
-  parse(htmlContent) {
+  parse(htmlContent, autoProcess = true) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
     const gridElement = doc.querySelector(this.#gridSelectorQuery);
     if (!gridElement) {
       throw new Error("Grid element not found in the document.");
     }
-    const processedCellGrid = this.getProcessedCellGrid(gridElement);
-    return processedCellGrid;
+    if (autoProcess) {
+      return this.#getProcessedCellGrid(gridElement);
+    }
+    return this.getDOMElementGrid(gridElement);
   }
 
   /**
    * @param {HTMLElement} gridElement
    * @returns {GridCell[][]}
    */
-  getProcessedCellGrid(gridElement) {
+  #getProcessedCellGrid(gridElement) {
     const elementGrid = this.getDOMElementGrid(gridElement);
     return elementGrid.map((elements, rowIndex) =>
       elements.map((element, columnIndex) =>
