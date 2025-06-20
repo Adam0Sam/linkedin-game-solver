@@ -6,7 +6,7 @@ import { GridCell } from "../utils/grid/GridCell.js";
  */
 export class AbstractGridParser extends AbstractClass {
   #gridSelectorQuery;
-  construcotr(gridSelectorQuery) {
+  constructor(gridSelectorQuery) {
     super();
     this.#gridSelectorQuery = gridSelectorQuery;
   }

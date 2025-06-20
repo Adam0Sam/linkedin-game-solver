@@ -1,6 +1,7 @@
-import { QueensGridCell } from "../utils/grid/QueensGridCell";
+import { QueensGridCell } from "../utils/grid/QueensGridCell.js";
+import { AbstractGridParser } from "./AbstractGridParser.js";
 
-export class QueensGridParser {
+export default class QueensGridParser extends AbstractGridParser {
   constructor() {
     super("#queens-grid");
   }

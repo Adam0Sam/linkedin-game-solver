@@ -1,4 +1,4 @@
-import { QueensGridCell } from "./grid/QueensGridCell";
+import { QueensGridCell } from "./grid/QueensGridCell.js";
 
 const ANSI_COLOR_MAP = {
   reset: "\x1b[0m",
