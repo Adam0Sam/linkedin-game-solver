@@ -1,9 +1,9 @@
-import { GameRegistry } from "./core/GameRegistry.js";
+import { StaticGameRegistry } from "./core/StaticGameRegistry.js";
 
 function handleSolveGame(sendResponse) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const gameType = new URL(tabs[0].url).pathname.split("/")[2];
-    const gameRegistry = new GameRegistry();
+    const gameRegistry = new StaticGameRegistry();
     const solver = gameRegistry.getSolver(gameType);
 
     chrome.tabs.sendMessage(
@@ -17,13 +17,17 @@ function handleSolveGame(sendResponse) {
         console.log("Game grid received:", response.grid);
         const solutionGrid = solver.solve(response.grid);
 
-        chrome.tabs.sendMessage(tabs[0].id, {
-          action: "executeSolution",
-          solution: solutionGrid,
-          gameType,
-        });
-
-        sendResponse({ success: true });
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          {
+            action: "executeSolution",
+            solution: solutionGrid,
+            gameType,
+          },
+          (response) => {
+            sendResponse(response);
+          }
+        );
       }
     );
   });

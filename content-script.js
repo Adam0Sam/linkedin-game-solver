@@ -3,9 +3,9 @@ let gameRegistry;
 (async () => {
   try {
     const registryModule = await import(
-      chrome.runtime.getURL("core/GameRegistry.js")
+      chrome.runtime.getURL("core/StaticGameRegistry.js")
     );
-    gameRegistry = new registryModule.GameRegistry();
+    gameRegistry = new registryModule.StaticGameRegistry();
     console.log("LinkedIn Game Solver initialized");
   } catch (error) {
     console.error("Failed to initialize LinkedIn Game Solver:", error);
@@ -33,11 +33,8 @@ function handleGetGameGrid(request, sendResponse) {
 function handleExecuteSolution(request, sendResponse) {
   (async () => {
     try {
-      console.log("Executing solution:", request.solution, request.gameType);
-      // TODO: Implement code to make the moves on the page
-      // This would involve clicking on cells based on the solution
-
-      // For now, just acknowledge
+      const executor = gameRegistry.getExecutor(request.gameType);
+      executor.execute(document.documentElement.outerHTML, request.solution);
       sendResponse({ success: true });
     } catch (error) {
       console.error("Error executing solution:", error);

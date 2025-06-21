@@ -1,7 +1,8 @@
+import QueensSolutionExecutor from "../executors/QueensSolutionExecutor.js";
 import QueensGridParser from "../parsers/QueensGridParser.js";
 import QueensGameSolver from "../solvers/QueensGameSolver.js";
 
-export class GameRegistry {
+export class StaticGameRegistry {
   /**
    * @type {{string, AbstractGameParser}}
    * @private
@@ -24,7 +25,9 @@ export class GameRegistry {
     this.#solverMap = {
       queens: new QueensGameSolver(),
     };
-    this.#executorMap = {};
+    this.#executorMap = {
+      queens: new QueensSolutionExecutor(),
+    };
   }
 
   /**

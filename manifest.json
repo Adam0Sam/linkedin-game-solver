@@ -28,7 +28,8 @@
         "core/*",
         "utils/*",
         "solvers/*",
-        "parsers/*"
+        "parsers/*",
+        "executors/*"
       ],
       "matches": [
         "https://www.linkedin.com/*",
