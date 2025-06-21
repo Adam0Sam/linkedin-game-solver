@@ -25,17 +25,17 @@ export class AbstractSolutionExecutor extends AbstractClass {
   }
 
   /**
-   * @param {string} htmlContent
+   * @param {Document} doc
    * @param {GridCell[][]} solutionGrid
    * @throws {Error}
    */
-  execute(htmlContent, solutionGrid) {
-    const doc = this.#gridParser.toDoc(htmlContent);
+  execute(doc, solutionGrid) {
     const gridElements = this.#gridParser.parseToDomElements(doc);
     const clickSequence = this.getSolutionClickSequence(solutionGrid);
     for (const [rowIndex, colIndex] of clickSequence) {
       const cell = gridElements[rowIndex][colIndex];
       if (cell) {
+        console.log(`Clicking cell at (${rowIndex}, ${colIndex})`, cell);
         cell.click();
       } else {
         throw new Error(`Cell at (${rowIndex}, ${colIndex}) does not exist.`);

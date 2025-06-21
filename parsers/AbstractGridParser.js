@@ -32,15 +32,6 @@ export class AbstractGridParser extends AbstractClass {
   }
 
   /**
-   * @param {string} htmlContent
-   * @returns {Document}
-   */
-  toDoc(htmlContent) {
-    const parser = new DOMParser();
-    return parser.parseFromString(htmlContent, "text/html");
-  }
-
-  /**
    * @param {Document} doc
    * @returns {HTMLElement}
    * @throws {Error} If the grid element is not found in the document.
