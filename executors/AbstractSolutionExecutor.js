@@ -30,10 +30,11 @@ export class AbstractSolutionExecutor extends AbstractClass {
    * @throws {Error}
    */
   execute(htmlContent, solutionGrid) {
-    const gridElement = this.#gridParser.parseToDomElements(htmlContent, false);
+    const doc = this.#gridParser.toDoc(htmlContent);
+    const gridElements = this.#gridParser.parseToDomElements(doc);
     const clickSequence = this.getSolutionClickSequence(solutionGrid);
     for (const [rowIndex, colIndex] of clickSequence) {
-      const cell = gridElement[rowIndex][colIndex];
+      const cell = gridElements[rowIndex][colIndex];
       if (cell) {
         cell.click();
       } else {

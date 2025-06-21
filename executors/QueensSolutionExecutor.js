@@ -24,6 +24,7 @@ export default class QueensSolutionExecutor extends AbstractSolutionExecutor {
         }
       }
     }
+    console.log("Click sequence:", clickSequence);
     return clickSequence;
   }
 }

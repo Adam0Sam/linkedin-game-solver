@@ -40,6 +40,11 @@ export class AbstractGridParser extends AbstractClass {
     return parser.parseFromString(htmlContent, "text/html");
   }
 
+  /**
+   * @param {Document} doc
+   * @returns {HTMLElement}
+   * @throws {Error} If the grid element is not found in the document.
+   */
   #getGridElement(doc) {
     const gridElement = doc.querySelector(this.#gridSelectorQuery);
     if (!gridElement) {
