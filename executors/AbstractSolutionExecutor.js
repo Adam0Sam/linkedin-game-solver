@@ -30,11 +30,12 @@ export class AbstractSolutionExecutor extends AbstractClass {
    * @throws {Error}
    */
   execute(htmlContent, solutionGrid) {
-    const gridElement = this.#gridParser.parse(htmlContent, false);
+    const gridElement = this.#gridParser.parseToDomElements(htmlContent, false);
     const clickSequence = this.getSolutionClickSequence(solutionGrid);
     for (const [rowIndex, colIndex] of clickSequence) {
       const cell = gridElement[rowIndex][colIndex];
       if (cell) {
+        cell.click();
       } else {
         throw new Error(`Cell at (${rowIndex}, ${colIndex}) does not exist.`);
       }
