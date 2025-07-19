@@ -7,8 +7,8 @@ export class AbstractGameSolver extends AbstractClass {
    * @returns {object}
    * @throws {NotImplementedError}
    */
-  toGameCell(cell) {
-    throw new NotImplementedError("toGameCell");
+  parseToGameCell(cell) {
+    throw new NotImplementedError("parseToGameCell");
   }
 
   /**
@@ -24,7 +24,7 @@ export class AbstractGameSolver extends AbstractClass {
       if (!Array.isArray(row) || row.length === 0) {
         return false;
       }
-      return row.every((cell) => this.toGameCell(cell));
+      return row.every((cell) => this.parseToGameCell(cell));
     });
   }
 
@@ -42,7 +42,7 @@ export class AbstractGameSolver extends AbstractClass {
    */
   solve(grid) {
     const parsedGrid = grid.map((row) =>
-      row.map((cell) => this.toGameCell(cell))
+      row.map((cell) => this.parseToGameCell(cell))
     );
 
     return this.getSolvedGrid(parsedGrid);

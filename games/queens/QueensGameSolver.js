@@ -184,7 +184,7 @@ export class QueensGameSolver extends AbstractGameSolver {
    * @returns {QueensGridCell}
    * @throws {Error}
    */
-  toGameCell(cell) {
+  parseToGameCell(cell) {
     if (
       !cell ||
       typeof cell.col !== "number" ||

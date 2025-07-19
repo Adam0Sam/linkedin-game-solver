@@ -20,7 +20,7 @@ function handleGetGameGrid(request, sendResponse) {
 
   try {
     const gameParser = gameRegistry.getParser(request.gameType);
-    const gameGrid = gameParser.parseToGameCellGrid(document);
+    const gameGrid = gameParser.parseparseToGameCellGrid(document);
 
     sendResponse({ grid: gameGrid });
   } catch (error) {

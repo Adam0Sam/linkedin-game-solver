@@ -12,7 +12,7 @@ export class QueensGridParser extends AbstractGridParser {
    * @param {number} columnIndex
    * @returns {QueensGridCell}
    */
-  toGameCell(domElement, rowIndex, columnIndex) {
+  parseToGameCell(domElement, rowIndex, columnIndex) {
     const color = parseInt(domElement.classList[1].split("-")[2], 10);
     return new QueensGridCell(columnIndex, rowIndex, color, "empty");
   }

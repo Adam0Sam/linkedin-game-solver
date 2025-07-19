@@ -410,7 +410,7 @@ describe("QueensGameSolver", () => {
     ];
 
     const processedGrid = rawGrid.map((row) =>
-      row.map((cell) => solver.toGameCell(cell))
+      row.map((cell) => solver.parseToGameCell(cell))
     );
 
     const realSolvedGrid = structuredClone(processedGrid).map((row) =>
@@ -993,7 +993,7 @@ describe("QueensGameSolver", () => {
     ];
 
     const processedGrid = rawGrid.map((row) =>
-      row.map((cell) => solver.toGameCell(cell))
+      row.map((cell) => solver.parseToGameCell(cell))
     );
 
     const realSolvedGrid = structuredClone(processedGrid).map((row) =>
