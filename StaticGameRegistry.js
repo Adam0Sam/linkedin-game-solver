@@ -1,6 +1,8 @@
-import QueensSolutionExecutor from "../executors/QueensSolutionExecutor.js";
-import QueensGridParser from "../parsers/QueensGridParser.js";
-import QueensGameSolver from "../solvers/QueensGameSolver.js";
+import {
+  QueensGameSolver,
+  QueensGridParser,
+  QueensSolutionExecutor,
+} from "./games/queens/index.js";
 
 export class StaticGameRegistry {
   /**

@@ -3,7 +3,7 @@ let gameRegistry;
 (async () => {
   try {
     const registryModule = await import(
-      chrome.runtime.getURL("core/StaticGameRegistry.js")
+      chrome.runtime.getURL("StaticGameRegistry.js")
     );
     gameRegistry = new registryModule.StaticGameRegistry();
     console.log("LinkedIn Game Solver initialized");

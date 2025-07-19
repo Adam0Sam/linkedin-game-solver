@@ -1,7 +1,7 @@
-import { QueensGridCell } from "../utils/grid/QueensGridCell.js";
-import { AbstractGridParser } from "./AbstractGridParser.js";
+import { QueensGridCell } from "./QueensGridCell.js";
+import { AbstractGridParser } from "../common/abstract-helpers/AbstractGridParser.js";
 
-export default class QueensGridParser extends AbstractGridParser {
+export class QueensGridParser extends AbstractGridParser {
   constructor() {
     super("#queens-grid");
   }
@@ -12,7 +12,7 @@ export default class QueensGridParser extends AbstractGridParser {
    * @param {number} columnIndex
    * @returns {QueensGridCell}
    */
-  DomElementToGameCell(domElement, rowIndex, columnIndex) {
+  domElementToGameCell(domElement, rowIndex, columnIndex) {
     const color = parseInt(domElement.classList[1].split("-")[2], 10);
     return new QueensGridCell(columnIndex, rowIndex, color, "empty");
   }

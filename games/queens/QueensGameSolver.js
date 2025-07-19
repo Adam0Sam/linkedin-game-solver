@@ -1,5 +1,5 @@
-import { AbstractGameSolver } from "./AbstractGameSolver.js";
-import { QueensGridCell } from "../utils/grid/QueensGridCell.js";
+import { AbstractGameSolver } from "../common/abstract-helpers/AbstractGameSolver.js";
+import { QueensGridCell } from "./QueensGridCell.js";
 
 class ColorGroup {
   constructor(color) {
@@ -172,7 +172,7 @@ class GridSnapshot {
   }
 }
 
-export default class QueensGameSolver extends AbstractGameSolver {
+export class QueensGameSolver extends AbstractGameSolver {
   /**
    * @private
    * @type {string[]}

@@ -1,4 +1,4 @@
-import { AbstractClass, NotImplementedError } from "../utils/AbstractClass.js";
+import { AbstractClass, NotImplementedError } from "./AbstractClass.js";
 
 export class AbstractGameSolver extends AbstractClass {
   /**
