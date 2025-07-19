@@ -1,4 +1,4 @@
-import { StaticGameRegistry } from "./core/StaticGameRegistry.js";
+import { StaticGameRegistry } from "./StaticGameRegistry.js";
 
 function handleSolveGame(sendResponse) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

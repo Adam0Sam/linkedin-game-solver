@@ -1,5 +1,5 @@
-import { AbstractClass, NotImplementedError } from "../utils/AbstractClass.js";
-import { AbstractGridParser } from "../parsers/AbstractGridParser.js";
+import { AbstractClass, NotImplementedError } from "./AbstractClass.js";
+import { AbstractGridParser } from "./AbstractGridParser.js";
 
 export class AbstractSolutionExecutor extends AbstractClass {
   /**

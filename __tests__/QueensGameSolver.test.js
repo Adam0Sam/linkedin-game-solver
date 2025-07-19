@@ -1,6 +1,6 @@
-import QueensGameSolver from "../QueensGameSolver";
+import QueensGameSolver from "../solvers/QueensGameSolver";
 import { QueensGridCell } from "../../utils/grid/QueensGridCell";
-import { queensGridToAsciiWithColors } from "../../utils/queens-grid-to-ascii";
+import { queensGridToAsciiWithColors } from "../utils/queens-grid-to-ascii";
 
 describe("QueensGameSolver", () => {
   it("Should Solve Game 1", () => {
