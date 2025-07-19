@@ -1,5 +1,5 @@
-import { AbstractGridParser } from "../common/abstract-helpers/AbstractGridParser";
-import { ZipGridCell } from "./ZipGridCell";
+import { AbstractGridParser } from "../common/abstract-helpers/AbstractGridParser.js";
+import { ZipGridCell } from "./ZipGridCell.js";
 
 export class ZipGridParser extends AbstractGridParser {
   constructor() {

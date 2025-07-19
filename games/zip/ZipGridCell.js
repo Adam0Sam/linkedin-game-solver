@@ -1,4 +1,4 @@
-import { GridCell } from "../common/GridCell";
+import { GridCell } from "../common/GridCell.js";
 
 export class ZipGridCell extends GridCell {
   /**

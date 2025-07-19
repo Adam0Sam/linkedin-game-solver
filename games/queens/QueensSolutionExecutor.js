@@ -1,5 +1,5 @@
 import { AbstractSolutionExecutor } from "../common/abstract-helpers/AbstractSolutionExecutor.js";
-import QueensGridParser from "./QueensGridParser.js";
+import { QueensGridParser } from "./QueensGridParser.js";
 
 export class QueensSolutionExecutor extends AbstractSolutionExecutor {
   constructor() {

@@ -1,5 +1,5 @@
-import { AbstractGridParser } from '../common/abstract-helpers/AbstractGridParser';
-import { {{cmpNamePascalCase}}GridCell } from './{{cmpNamePascalCase}}GridCell';
+import { AbstractGridParser } from '../common/abstract-helpers/AbstractGridParser.js';
+import { {{cmpNamePascalCase}}GridCell } from './{{cmpNamePascalCase}}GridCell.js';
 
 export class {{cmpNamePascalCase}}GridParser extends AbstractGridParser {
     constructor() {

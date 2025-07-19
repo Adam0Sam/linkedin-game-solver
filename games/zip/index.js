@@ -1,3 +1,3 @@
-export * from './ZipGameSolver';
-export * from './ZipGridParser';
-export * from './ZipSolutionExecutor';
+export * from "./ZipGameSolver.js";
+export * from "./ZipGridParser.js";
+export * from "./ZipSolutionExecutor.js";

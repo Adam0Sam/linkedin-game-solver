@@ -1,4 +1,4 @@
-import { GridCell } from "./GridCell.js";
+import { GridCell } from "../common/GridCell.js";
 
 export class QueensGridCell extends GridCell {
   /**
