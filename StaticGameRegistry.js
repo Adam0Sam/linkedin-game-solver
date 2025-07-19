@@ -4,6 +4,12 @@ import {
   QueensSolutionExecutor,
 } from "./games/queens/index.js";
 
+import {
+  ZipGameSolver,
+  ZipGridParser,
+  ZipSolutionExecutor,
+} from "./games/zip/index.js";
+
 export class StaticGameRegistry {
   /**
    * @type {{string, AbstractGameParser}}
@@ -23,12 +29,17 @@ export class StaticGameRegistry {
   constructor() {
     this.#parserMap = {
       queens: new QueensGridParser(),
+      zip: new ZipGridParser(),
     };
     this.#solverMap = {
       queens: new QueensGameSolver(),
+      // WIP
+      zip: new ZipGameSolver(),
     };
     this.#executorMap = {
       queens: new QueensSolutionExecutor(),
+      // WIP
+      zip: new ZipSolutionExecutor(),
     };
   }
 

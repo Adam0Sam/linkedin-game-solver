@@ -62,7 +62,7 @@ export class AbstractGridParser extends AbstractClass {
    * @param {Document} doc
    * @returns {GridCell[][]}
    */
-  parseparseToGameCellGrid(doc) {
+  parseToGameCellGrid(doc) {
     const domElementGrid = this.parseToDomElementGrid(doc);
 
     return domElementGrid.map((elements, rowIndex) =>
@@ -86,6 +86,8 @@ export class AbstractGridParser extends AbstractClass {
     );
 
     const cellElements = gridElement.querySelectorAll("[data-cell-idx]");
+
+    console.log("Grid elements found:", cellElements);
 
     for (const cellElement of cellElements) {
       const { row, column } = this.extractCellPosition(cellElement, columns);

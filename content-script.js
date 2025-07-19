@@ -3,7 +3,7 @@ let gameRegistry;
 (async () => {
   try {
     const registryModule = await import(
-      chrome.runtime.getURL("StaticGameRegistry.js")
+      chrome.runtime.getURL("./StaticGameRegistry.js")
     );
     gameRegistry = new registryModule.StaticGameRegistry();
     console.log("LinkedIn Game Solver initialized");
@@ -20,7 +20,7 @@ function handleGetGameGrid(request, sendResponse) {
 
   try {
     const gameParser = gameRegistry.getParser(request.gameType);
-    const gameGrid = gameParser.parseparseToGameCellGrid(document);
+    const gameGrid = gameParser.parseToGameCellGrid(document);
 
     sendResponse({ grid: gameGrid });
   } catch (error) {
