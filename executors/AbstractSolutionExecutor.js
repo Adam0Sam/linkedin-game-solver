@@ -65,7 +65,7 @@ export class AbstractSolutionExecutor extends AbstractClass {
    * @throws {Error}
    */
   execute(doc, solutionGrid) {
-    const gridElements = this.#gridParser.parseToDomElements(doc);
+    const gridElements = this.#gridParser.parseToDomElementGrid(doc);
     const clickSequence = this.getSolutionClickSequence(solutionGrid);
     for (const [rowIndex, colIndex] of clickSequence) {
       const cell = gridElements[rowIndex][colIndex];

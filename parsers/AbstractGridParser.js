@@ -27,7 +27,7 @@ export class AbstractGridParser extends AbstractClass {
    * @param {number} columnIndex
    * @returns {GridCell}
    */
-  DOMElementToProcessedCell(domElement, rowIndex, columnIndex) {
+  DomElementToGameCell(domElement, rowIndex, columnIndex) {
     throw new NotImplementedError("DOMElementToProcessedCell");
   }
 
@@ -45,15 +45,38 @@ export class AbstractGridParser extends AbstractClass {
   }
 
   /**
+   * @param {HTMLElement} gridElement
+   * @returns {{ rows: number, columns: number }}
+   */
+  extractGridDimensions(gridElement) {
+    const inlineStyle = gridElement.getAttribute("style");
+    const rows = parseInt(inlineStyle.match(/--rows:\s*(\d+)/)[1], 10);
+    const columns = parseInt(inlineStyle.match(/--cols:\s*(\d+)/)[1], 10);
+    return { rows, columns };
+  }
+
+  /**
+   * @param {HTMLElement} cellElement
+   * @param {number} columns
+   * @returns {{ row: number, column: number }}
+   */
+  extractCellPosition(cellElement, columns) {
+    const cellIdx = parseInt(cellElement.dataset.cellIdx, 10);
+    const column = cellIdx % columns;
+    const row = Math.floor(cellIdx / columns);
+    return { row, column };
+  }
+
+  /**
    * @param {Document} doc
    * @returns {GridCell[][]}
    */
-  parseToCells(doc) {
-    const gridElement = this.#getGridElement(doc);
-    const elementGrid = this.getDOMElementGrid(gridElement);
-    return elementGrid.map((elements, rowIndex) =>
+  parseToGameCellGrid(doc) {
+    const domElementGrid = this.parseToDomElementGrid(doc);
+
+    return domElementGrid.map((elements, rowIndex) =>
       elements.map((element, columnIndex) =>
-        this.DOMElementToProcessedCell(element, rowIndex, columnIndex)
+        this.DomElementToGameCell(element, rowIndex, columnIndex)
       )
     );
   }
@@ -62,8 +85,22 @@ export class AbstractGridParser extends AbstractClass {
    * @param {Document} doc
    * @returns {HTMLElement[][]}
    */
-  parseToDomElements(doc) {
+  parseToDomElementGrid(doc) {
     const gridElement = this.#getGridElement(doc);
-    return this.getDOMElementGrid(gridElement);
+
+    const { rows, columns } = this.extractGridDimensions(gridElement);
+
+    const grid = Array.from({ length: rows }, () =>
+      Array.from({ length: columns })
+    );
+
+    const cellElements = gridElement.querySelectorAll("[data-cell-idx]");
+
+    for (const cellElement of cellElements) {
+      const { row, column } = this.extractCellPosition(cellElement, columns);
+      grid[row][column] = cellElement;
+    }
+
+    return grid;
   }
 }
