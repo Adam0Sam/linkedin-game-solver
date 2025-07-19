@@ -13,21 +13,12 @@ export class AbstractGridParser extends AbstractClass {
 
   /**
    * @abstract
-   * @param {HTMLElement} gridElement
-   * @returns {HTMLElement[][]}
-   */
-  getDOMElementGrid(gridElement) {
-    throw new NotImplementedError("getDOMElementGrid");
-  }
-
-  /**
-   * @abstract
    * @param {HTMLElement} domElement
    * @param {number} rowIndex
    * @param {number} columnIndex
    * @returns {GridCell}
    */
-  domElementToGameCell(domElement, rowIndex, columnIndex) {
+  toGameCell(domElement, rowIndex, columnIndex) {
     throw new NotImplementedError("DOMElementToProcessedCell");
   }
 
@@ -76,7 +67,7 @@ export class AbstractGridParser extends AbstractClass {
 
     return domElementGrid.map((elements, rowIndex) =>
       elements.map((element, columnIndex) =>
-        this.domElementToGameCell(element, rowIndex, columnIndex)
+        this.toGameCell(element, rowIndex, columnIndex)
       )
     );
   }
