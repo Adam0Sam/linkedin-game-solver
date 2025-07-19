@@ -19,7 +19,7 @@ export class AbstractGridParser extends AbstractClass {
    * @returns {GridCell}
    */
   parseToGameCell(domElement, rowIndex, columnIndex) {
-    throw new NotImplementedError("DOMElementToProcessedCell");
+    throw new NotImplementedError("parseToGameCell");
   }
 
   /**
