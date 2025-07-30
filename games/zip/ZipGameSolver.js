@@ -34,17 +34,18 @@ class Path {
     return this.interCells.pop();
   }
 
-  /**
-   * @returns {Array<ZipGridCell>}
-   */
   getPathCells() {
     return [this.startCell, ...this.interCells, this.endCell];
   }
 
-  getPathId() {
-    return this.getPathCells()
-      .map((cell) => cell.toString())
-      .join("-");
+  clone() {
+    const clonedPath = new Path(this.startCell, this.endCell);
+    clonedPath.interCells = [...this.interCells];
+    return clonedPath;
+  }
+
+  getLength() {
+    return this.getPathCells().length;
   }
 }
 
@@ -75,6 +76,10 @@ class PathCollection {
     this.paths = null;
   }
 
+  /**
+   * @param {ZipGridCell} currentCell
+   * @private
+   */
   #findNextTraversableCells(currentCell) {
     /**
      * @type {Array<ZipGridCell>}
@@ -86,31 +91,73 @@ class PathCollection {
       { row: 0, col: -1 }, // Left
       { row: 0, col: 1 }, // Right
     ];
+
     for (const { row, col } of directions) {
       const newRow = currentCell.row + row;
       const newCol = currentCell.col + col;
-      const nextCell = this.grid[newRow]?.[newCol];
-      if (nextCell && nextCell.isTraversable()) {
-        traversableCells.push(nextCell);
+
+      if (
+        newRow >= 0 &&
+        newRow < this.grid.length &&
+        newCol >= 0 &&
+        newCol < this.grid[0].length
+      ) {
+        const nextCell = this.grid[newRow][newCol];
+        if (nextCell && nextCell.isTraversable()) {
+          traversableCells.push(nextCell);
+        }
       }
     }
     return traversableCells;
   }
 
   /**
-   * @returns {Array<Path>}
    * @private
    */
   #findAllPaths() {
-    const cellStack = [this.startCell];
+    /**
+     * @type {Array<Path>}
+     */
+    const allPaths = [];
 
-    let currentPath = new Path(this.startCell, this.endCell);
-    let visitedCellIds = new Set([this.startCell.toString()]);
-    // const path
+    /**
+     * @type {Set<string>}
+     */
+    const visited = new Set();
 
-    while (cellStack.length > 0) {
-      const currentCell = cellStack.pop();
-    }
+    /**
+     * @param {ZipGridCell} currentCell
+     * @param {Path} currentPath
+     */
+    const dfs = (currentCell, currentPath) => {
+      const nextCells = this.#findNextTraversableCells(currentCell);
+
+      for (const nextCell of nextCells) {
+        const cellId = nextCell.toString();
+
+        if (visited.has(cellId)) {
+          continue;
+        }
+
+        visited.add(cellId);
+
+        if (nextCell === this.endCell) {
+          allPaths.push(currentPath.clone());
+        } else {
+          currentPath.appendInterCell(nextCell);
+          dfs(nextCell, currentPath);
+          currentPath.popInterCell();
+        }
+
+        visited.delete(cellId);
+      }
+    };
+
+    visited.add(this.startCell.toString());
+    const initialPath = new Path(this.startCell, this.endCell);
+    dfs(this.startCell, initialPath);
+
+    return allPaths;
   }
 
   getAllPaths() {
@@ -126,5 +173,7 @@ export class ZipGameSolver extends AbstractGameSolver {
     super(grid);
   }
 
-  getSolvedGrid() {}
+  getSolvedGrid() {
+    return this.grid;
+  }
 }

@@ -34,7 +34,7 @@ export class AbstractGameSolver extends AbstractClass {
    * @returns {GridCell[][]}
    */
   getSolvedGrid(grid) {
-    throw new NotImplementedError("getClickPlacements");
+    throw new NotImplementedError("getSolvedGrid");
   }
   /**
    * @param {GridCell[][]} grid
