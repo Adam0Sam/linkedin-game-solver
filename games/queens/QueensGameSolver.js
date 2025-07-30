@@ -241,7 +241,6 @@ export class QueensGameSolver extends AbstractGameSolver {
 
   /**
    * @param {QueensGridCell[][]} grid
-   * @returns {QueensGridCell[][]}
    */
   getSolvedGrid(grid) {
     const initialSnapshot = new GridSnapshot(grid);

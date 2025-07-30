@@ -108,6 +108,12 @@ class PathCollection {
         }
       }
     }
+
+    console.log(
+      `Current Cell: ${currentCell}, Traversable Cells: ${traversableCells
+        .map((cell) => cell.toString())
+        .join(", ")}`
+    );
     return traversableCells;
   }
 
@@ -141,7 +147,8 @@ class PathCollection {
 
         visited.add(cellId);
 
-        if (nextCell === this.endCell) {
+        if (nextCell.isNeighborOf(this.endCell)) {
+          currentPath.appendInterCell(nextCell);
           allPaths.push(currentPath.clone());
         } else {
           currentPath.appendInterCell(nextCell);
@@ -169,18 +176,19 @@ class PathCollection {
 }
 
 export class ZipGameSolver extends AbstractGameSolver {
-  constructor(grid) {
-    super(grid);
+  constructor() {
+    super(ZipGridCell);
   }
 
-  getSolvedGrid() {
-    console.log("Solving Zip game...");
-    console.log(
-      new PathCollection(
-        this.grid[0][0],
-        this.grid[3][this.grid[0].length - 1], // Assuming end cell is at bottom-right
-        this.grid
-      ).getAllPaths()
-    );
+  /**
+   * @param {ZipGridCell[][]} grid
+   */
+  getSolvedGrid(grid) {
+    const startCell = grid[0][0];
+    const endCell = grid[3][grid[0].length - 1];
+    console.log("Start Cell:", startCell, "End Cell:", endCell);
+    const pathCollection = new PathCollection(startCell, endCell, grid);
+    const allPaths = pathCollection.getAllPaths();
+    console.log(`Found ${allPaths.length} paths.`);
   }
 }
