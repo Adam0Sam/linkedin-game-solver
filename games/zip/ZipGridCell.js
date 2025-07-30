@@ -1,6 +1,6 @@
-import { GridCell } from "../common/GridCell.js";
+import { AbstractGridCell } from "../common/abstract-helpers/AbstractGridCell.js";
 
-export class ZipGridCell extends GridCell {
+export class ZipGridCell extends AbstractGridCell {
   /**
    * @param {number} col
    * @param {number} row

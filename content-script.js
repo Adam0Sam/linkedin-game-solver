@@ -24,6 +24,7 @@ function handleGetGameGrid(request, sendResponse) {
 
     sendResponse({ grid: gameGrid });
   } catch (error) {
+    console.error("Error parsing game grid:", error);
     sendResponse({ error: error.message });
   }
 

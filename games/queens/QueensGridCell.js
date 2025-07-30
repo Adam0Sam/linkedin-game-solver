@@ -24,7 +24,7 @@ export class QueensGridCell extends AbstractGridCell {
    */
   static isValidCell(object) {
     return (
-      super.isValidCell(object) &&
+      AbstractGridCell.isValidCell(object) &&
       typeof object.color === "number" &&
       (object.cellState === "queen" ||
         object.cellState === "cross" ||
@@ -33,7 +33,7 @@ export class QueensGridCell extends AbstractGridCell {
   }
 
   static toValidCell(object) {
-    if (!this.isValidCell(object)) {
+    if (!QueensGridCell.isValidCell(object)) {
       throw new Error("Invalid QueensGridCell object");
     }
     return new QueensGridCell(

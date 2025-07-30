@@ -1,5 +1,5 @@
 import { AbstractClass, NotImplementedError } from "./AbstractClass.js";
-import { AbstractGridCell } from "../GridCell.js";
+import { AbstractGridCell } from "./AbstractGridCell.js";
 
 /**
  * @abstract

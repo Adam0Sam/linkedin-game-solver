@@ -6,6 +6,8 @@ export class AbstractGridCell extends AbstractClass {
    * @param {number} row
    */
   constructor(col, row) {
+    super();
+
     /**
      * @type {number}
      */

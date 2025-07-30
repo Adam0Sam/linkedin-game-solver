@@ -10,7 +10,7 @@ export class AbstractGameSolver extends AbstractClass {
   }
 
   /**
-   * @param {GridCell[][]} gameGrid
+   * @param {AbstractGridCell[][]} gameGrid
    * @returns {boolean}
    */
   isGameGridValid(gameGrid) {
@@ -28,16 +28,16 @@ export class AbstractGameSolver extends AbstractClass {
 
   /**
    * @abstract
-   * @param {GridCell[][]} grid
-   * @returns {GridCell[][]}
+   * @param {AbstractGridCell[][]} grid
+   * @returns {AbstractGridCell[][]}
    */
   getSolvedGrid(grid) {
     throw new NotImplementedError("getSolvedGrid");
   }
 
   /**
-   * @param {GridCell[][]} grid
-   * @returns {GridCell[][]}
+   * @param {AbstractGridCell[][]} grid
+   * @returns {AbstractGridCell[][]}
    */
   solve(grid) {
     const parsedGrid = grid.map((row) =>
