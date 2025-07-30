@@ -410,7 +410,7 @@ describe("QueensGameSolver", () => {
     ];
 
     const processedGrid = rawGrid.map((row) =>
-      row.map((cell) => solver.parseToGameCell(cell))
+      row.map((cell) => QueensGridCell.toValidCell(cell))
     );
 
     const realSolvedGrid = structuredClone(processedGrid).map((row) =>

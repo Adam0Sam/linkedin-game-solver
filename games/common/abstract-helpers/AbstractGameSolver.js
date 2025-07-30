@@ -2,13 +2,11 @@ import { AbstractClass, NotImplementedError } from "./AbstractClass.js";
 
 export class AbstractGameSolver extends AbstractClass {
   /**
-   * @abstract
-   * @param {GridCell} cell
-   * @returns {object}
-   * @throws {NotImplementedError}
+   * @param {Class} cellClass
    */
-  parseToGameCell(cell) {
-    throw new NotImplementedError("parseToGameCell");
+  constructor(cellClass) {
+    super();
+    this.cellClass = cellClass;
   }
 
   /**
@@ -24,7 +22,7 @@ export class AbstractGameSolver extends AbstractClass {
       if (!Array.isArray(row) || row.length === 0) {
         return false;
       }
-      return row.every((cell) => this.parseToGameCell(cell));
+      return row.every((cell) => this.cellClass.isValidCell(cell));
     });
   }
 
@@ -36,13 +34,14 @@ export class AbstractGameSolver extends AbstractClass {
   getSolvedGrid(grid) {
     throw new NotImplementedError("getSolvedGrid");
   }
+
   /**
    * @param {GridCell[][]} grid
    * @returns {GridCell[][]}
    */
   solve(grid) {
     const parsedGrid = grid.map((row) =>
-      row.map((cell) => this.parseToGameCell(cell))
+      row.map((cell) => this.cellClass.toValidCell(cell))
     );
 
     return this.getSolvedGrid(parsedGrid);

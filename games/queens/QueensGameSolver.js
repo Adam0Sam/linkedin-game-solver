@@ -173,6 +173,10 @@ class GridSnapshot {
 }
 
 export class QueensGameSolver extends AbstractGameSolver {
+  constructor() {
+    super(QueensGridCell);
+  }
+
   /**
    * @private
    * @type {string[]}
