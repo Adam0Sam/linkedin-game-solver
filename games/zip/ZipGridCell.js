@@ -20,4 +20,11 @@ export class ZipGridCell extends GridCell {
      */
     this.cellState = cellState;
   }
+
+  /**
+   * @returns {boolean}
+   */
+  isTraversable() {
+    return this.cellContent === "blank" && this.cellState === "empty";
+  }
 }

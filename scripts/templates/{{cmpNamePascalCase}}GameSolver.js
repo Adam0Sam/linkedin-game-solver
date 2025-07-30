@@ -5,7 +5,7 @@ export class {{cmpNamePascalCase}}GameSolver extends AbstractGameSolver {
         super(grid);
     }
 
-    solve() {
+    getSolvedGrid() {
         // Barebones solve method
         return [];
     }
