@@ -174,6 +174,13 @@ export class ZipGameSolver extends AbstractGameSolver {
   }
 
   getSolvedGrid() {
-    return this.grid;
+    console.log("Solving Zip game...");
+    console.log(
+      new PathCollection(
+        this.grid[0][0],
+        this.grid[3][this.grid[0].length - 1], // Assuming end cell is at bottom-right
+        this.grid
+      ).getAllPaths()
+    );
   }
 }
