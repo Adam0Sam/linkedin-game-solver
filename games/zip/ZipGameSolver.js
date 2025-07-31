@@ -181,14 +181,54 @@ export class ZipGameSolver extends AbstractGameSolver {
   }
 
   /**
+   * @type {{number: ZipGridCell}}
+   */
+  #numberedCellDict = {};
+
+  /**
+   * @type {number}
+   */
+  #highestCellContentNumber = 0;
+
+  /**
+   * @param {number} cellContentNumber
+   * @param {ZipGridCell[][]} gridSnapshot
+   * @private
+   */
+  #explorePaths(cellContentNumber, gridSnapshot) {
+    if (Object.keys(this.#numberedCellDict).length === 0) {
+      throw new Error("Numbered cell dictionary is empty.");
+    }
+
+    if (this.#highestCellContentNumber < cellContentNumber) {
+      return gridSnapshot;
+    }
+
+    const startCell = this.#numberedCellDict[cellContentNumber];
+
+    if (!startCell) {
+    }
+  }
+
+  /**
    * @param {ZipGridCell[][]} grid
    */
   getSolvedGrid(grid) {
-    const startCell = grid[0][0];
-    const endCell = grid[3][grid[0].length - 1];
-    console.log("Start Cell:", startCell, "End Cell:", endCell);
-    const pathCollection = new PathCollection(startCell, endCell, grid);
-    const allPaths = pathCollection.getAllPaths();
-    console.log(`Found ${allPaths.length} paths.`);
+    /**
+     * @type {{string: PathCollection}}
+     */
+    const pathCollectionDict = {};
+
+    for (const row of grid) {
+      for (const cell of row) {
+        if (typeof cell.cellContent === "number") {
+          this.#numberedCellDict[cell.cellContent] = cell;
+          this.#highestCellContentNumber = Math.max(
+            this.#highestCellContentNumber,
+            cell.cellContent
+          );
+        }
+      }
+    }
   }
 }
