@@ -1,4 +1,4 @@
-import { AbstractSolutionExecutor } from '../common/abstract-helpers/AbstractSolutionExecutor';
+import { AbstractSolutionExecutor } from '../common/abstract-helpers/AbstractSolutionExecutor.js';
 
 export class {{cmpNamePascalCase}}SolutionExecutor extends AbstractSolutionExecutor {
     constructor() {

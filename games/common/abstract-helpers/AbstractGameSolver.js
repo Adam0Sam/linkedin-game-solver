@@ -2,17 +2,15 @@ import { AbstractClass, NotImplementedError } from "./AbstractClass.js";
 
 export class AbstractGameSolver extends AbstractClass {
   /**
-   * @abstract
-   * @param {GridCell} cell
-   * @returns {object}
-   * @throws {NotImplementedError}
+   * @param {Class} cellClass
    */
-  parseToGameCell(cell) {
-    throw new NotImplementedError("parseToGameCell");
+  constructor(cellClass) {
+    super();
+    this.cellClass = cellClass;
   }
 
   /**
-   * @param {GridCell[][]} gameGrid
+   * @param {AbstractGridCell[][]} gameGrid
    * @returns {boolean}
    */
   isGameGridValid(gameGrid) {
@@ -24,25 +22,26 @@ export class AbstractGameSolver extends AbstractClass {
       if (!Array.isArray(row) || row.length === 0) {
         return false;
       }
-      return row.every((cell) => this.parseToGameCell(cell));
+      return row.every((cell) => this.cellClass.isValidCell(cell));
     });
   }
 
   /**
    * @abstract
-   * @param {GridCell[][]} grid
-   * @returns {GridCell[][]}
+   * @param {AbstractGridCell[][]} grid
+   * @returns {AbstractGridCell[][]}
    */
   getSolvedGrid(grid) {
-    throw new NotImplementedError("getClickPlacements");
+    throw new NotImplementedError("getSolvedGrid");
   }
+
   /**
-   * @param {GridCell[][]} grid
-   * @returns {GridCell[][]}
+   * @param {AbstractGridCell[][]} grid
+   * @returns {AbstractGridCell[][]}
    */
   solve(grid) {
     const parsedGrid = grid.map((row) =>
-      row.map((cell) => this.parseToGameCell(cell))
+      row.map((cell) => this.cellClass.toValidCell(cell))
     );
 
     return this.getSolvedGrid(parsedGrid);

@@ -1,6 +1,6 @@
-import QueensGameSolver from "../solvers/QueensGameSolver";
-import { QueensGridCell } from "../../utils/grid/QueensGridCell";
-import { queensGridToAsciiWithColors } from "../utils/queens-grid-to-ascii";
+import QueensGameSolver from "../solvers/QueensGameSolver.js";
+import { QueensGridCell } from "../../utils/grid/QueensGridCell.js";
+import { queensGridToAsciiWithColors } from "../utils/queens-grid-to-ascii.js";
 
 describe("QueensGameSolver", () => {
   it("Should Solve Game 1", () => {
@@ -410,7 +410,7 @@ describe("QueensGameSolver", () => {
     ];
 
     const processedGrid = rawGrid.map((row) =>
-      row.map((cell) => solver.parseToGameCell(cell))
+      row.map((cell) => QueensGridCell.toValidCell(cell))
     );
 
     const realSolvedGrid = structuredClone(processedGrid).map((row) =>

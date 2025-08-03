@@ -1,5 +1,5 @@
 import { AbstractClass, NotImplementedError } from "./AbstractClass.js";
-import { GridCell } from "../GridCell.js";
+import { AbstractGridCell } from "./AbstractGridCell.js";
 
 /**
  * @abstract
@@ -16,7 +16,7 @@ export class AbstractGridParser extends AbstractClass {
    * @param {HTMLElement} domElement
    * @param {number} rowIndex
    * @param {number} columnIndex
-   * @returns {GridCell}
+   * @returns {AbstractGridCell}
    */
   parseToGameCell(domElement, rowIndex, columnIndex) {
     throw new NotImplementedError("parseToGameCell");
@@ -60,9 +60,9 @@ export class AbstractGridParser extends AbstractClass {
 
   /**
    * @param {Document} doc
-   * @returns {GridCell[][]}
+   * @returns {AbstractGridCell[][]}
    */
-  parseparseToGameCellGrid(doc) {
+  parseToGameCellGrid(doc) {
     const domElementGrid = this.parseToDomElementGrid(doc);
 
     return domElementGrid.map((elements, rowIndex) =>

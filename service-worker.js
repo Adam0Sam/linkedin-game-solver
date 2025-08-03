@@ -16,6 +16,7 @@ function handleSolveGame(sendResponse) {
         }
         console.log("Game grid received:", response.grid);
         const solutionGrid = solver.solve(response.grid);
+        console.log("Solution grid:", solutionGrid);
 
         chrome.tabs.sendMessage(
           tabs[0].id,

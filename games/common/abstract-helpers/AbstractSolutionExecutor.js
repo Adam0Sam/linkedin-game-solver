@@ -17,7 +17,7 @@ export class AbstractSolutionExecutor extends AbstractClass {
   }
 
   /**
-   * @param {GridCell[][]} solutionGrid
+   * @param {AbstractGridCell[][]} solutionGrid
    * @returns {number[][]}
    */
   getSolutionClickSequence(solutionGrid) {
@@ -61,7 +61,7 @@ export class AbstractSolutionExecutor extends AbstractClass {
 
   /**
    * @param {Document} doc
-   * @param {GridCell[][]} solutionGrid
+   * @param {AbstractGridCell[][]} solutionGrid
    * @throws {Error}
    */
   execute(doc, solutionGrid) {
