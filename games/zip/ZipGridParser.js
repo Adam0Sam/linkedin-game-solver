@@ -13,11 +13,11 @@ export class ZipGridParser extends AbstractGridParser {
    * @returns {ZipGridCell}
    */
   parseToGameCell(domElement, rowIndex, columnIndex) {
-    const cellHasContent = domElement.children.length > 1;
-    if (!cellHasContent) {
+    const cellContentElement = domElement.querySelector(".trail-cell-content");
+    if (!cellContentElement) {
       return new ZipGridCell(columnIndex, rowIndex, "blank", "empty");
     }
-    const cellContent = parseInt(domElement.children[1].textContent.trim(), 10);
+    const cellContent = parseInt(cellContentElement.textContent.trim(), 10);
     return new ZipGridCell(columnIndex, rowIndex, cellContent, "empty");
   }
 }

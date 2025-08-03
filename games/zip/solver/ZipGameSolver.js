@@ -9,9 +9,9 @@ export class ZipGameSolver extends AbstractGameSolver {
   }
 
   /**
-   * @type {Map<number, ZipGridCell>}
+   * @type {{number: ZipGridCell}}
    */
-  #numberedCellDict;
+  #numberedCellDict = {};
 
   /**
    * @type {number}
@@ -66,6 +66,7 @@ export class ZipGameSolver extends AbstractGameSolver {
     for (const row of grid) {
       for (const cell of row) {
         if (typeof cell.cellContent === "number") {
+          console.log("Found numbered cell:", cell);
           this.#numberedCellDict[cell.cellContent] = cell;
           this.#highestCellContentNumber = Math.max(
             this.#highestCellContentNumber,

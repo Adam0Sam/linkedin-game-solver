@@ -42,13 +42,18 @@ export class ZipGridCell extends AbstractGridCell {
    * @param {object} object
    */
   static isValidCell(object) {
-    return (
+    const isValid =
       AbstractGridCell.isValidCell(object) &&
       (object.cellContent === "blank" ||
         object.cellContent === "wall" ||
         typeof object.cellContent === "number") &&
-      (object.cellState === "empty" || object.cellState === "cross")
-    );
+      (object.cellState === "empty" || object.cellState === "cross");
+
+    if (!isValid) {
+      console.warn("Invalid ZipGridCell object:", object);
+    }
+
+    return isValid;
   }
 
   static toValidCell(object) {
