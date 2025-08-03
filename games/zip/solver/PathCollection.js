@@ -1,55 +1,6 @@
-import { AbstractGameSolver } from "../common/abstract-helpers/AbstractGameSolver.js";
-import { ZipGridCell } from "./ZipGridCell.js";
+import { Path } from "./Path.js";
 
-class Path {
-  /**
-   * @param {ZipGridCell} startCell
-   * @param {ZipGridCell} endCell
-   */
-  constructor(startCell, endCell) {
-    /**
-     * @type {ZipGridCell}
-     */
-    this.startCell = startCell;
-
-    /**
-     * @type {ZipGridCell}
-     */
-    this.endCell = endCell;
-
-    /**
-     * @type {Array<ZipGridCell>}
-     */
-    this.interCells = [];
-  }
-
-  /**
-   * @param {ZipGridCell} cell
-   */
-  appendInterCell(cell) {
-    this.interCells.push(cell);
-  }
-
-  popInterCell() {
-    return this.interCells.pop();
-  }
-
-  getPathCells() {
-    return [this.startCell, ...this.interCells, this.endCell];
-  }
-
-  clone() {
-    const clonedPath = new Path(this.startCell, this.endCell);
-    clonedPath.interCells = [...this.interCells];
-    return clonedPath;
-  }
-
-  getLength() {
-    return this.getPathCells().length;
-  }
-}
-
-class PathCollection {
+export class PathCollection {
   /**
    * @param {ZipGridCell} startCell
    * @param {ZipGridCell} endCell
@@ -109,11 +60,6 @@ class PathCollection {
       }
     }
 
-    console.log(
-      `Current Cell: ${currentCell}, Traversable Cells: ${traversableCells
-        .map((cell) => cell.toString())
-        .join(", ")}`
-    );
     return traversableCells;
   }
 
@@ -172,63 +118,5 @@ class PathCollection {
       this.paths = this.#findAllPaths();
     }
     return this.paths;
-  }
-}
-
-export class ZipGameSolver extends AbstractGameSolver {
-  constructor() {
-    super(ZipGridCell);
-  }
-
-  /**
-   * @type {{number: ZipGridCell}}
-   */
-  #numberedCellDict = {};
-
-  /**
-   * @type {number}
-   */
-  #highestCellContentNumber = 0;
-
-  /**
-   * @param {number} cellContentNumber
-   * @param {ZipGridCell[][]} gridSnapshot
-   * @private
-   */
-  #explorePaths(cellContentNumber, gridSnapshot) {
-    if (Object.keys(this.#numberedCellDict).length === 0) {
-      throw new Error("Numbered cell dictionary is empty.");
-    }
-
-    if (this.#highestCellContentNumber < cellContentNumber) {
-      return gridSnapshot;
-    }
-
-    const startCell = this.#numberedCellDict[cellContentNumber];
-
-    if (!startCell) {
-    }
-  }
-
-  /**
-   * @param {ZipGridCell[][]} grid
-   */
-  getSolvedGrid(grid) {
-    /**
-     * @type {{string: PathCollection}}
-     */
-    const pathCollectionDict = {};
-
-    for (const row of grid) {
-      for (const cell of row) {
-        if (typeof cell.cellContent === "number") {
-          this.#numberedCellDict[cell.cellContent] = cell;
-          this.#highestCellContentNumber = Math.max(
-            this.#highestCellContentNumber,
-            cell.cellContent
-          );
-        }
-      }
-    }
   }
 }

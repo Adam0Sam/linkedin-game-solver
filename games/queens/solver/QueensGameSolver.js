@@ -32,7 +32,6 @@ export class QueensGameSolver extends AbstractGameSolver {
     for (let row = 0; row < grid.length; row++) {
       for (let col = 0; col < grid[row].length; col++) {
         const cell = grid[row][col];
-        console.log("Queens cell", cell);
         if (!map.has(cell.color)) {
           map.set(cell.color, new ColorGroup(cell.color));
         }
@@ -50,10 +49,9 @@ export class QueensGameSolver extends AbstractGameSolver {
    */
   visitColorGroup(currentGridSnapshot, colorIndex) {
     if (colorIndex >= this.#sortedColors.length) {
-      if (currentGridSnapshot.hasSolution(this.#colorGroupMap)) {
-        return currentGridSnapshot;
-      }
-      return null;
+      return currentGridSnapshot.hasSolution(this.#colorGroupMap)
+        ? currentGridSnapshot
+        : null;
     }
 
     const color = this.#sortedColors[colorIndex];

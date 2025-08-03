@@ -5,7 +5,6 @@ export class QueensGridSnapshot extends AbstractGridSnapshot {
    * @param {Map<number, ColorGroup>} colorGroupMap
    */
   hasSolution(colorGroupMap) {
-    console.log("Checking solution for color groups", colorGroupMap);
     for (const colorGroup of colorGroupMap.values()) {
       let hasQueen = false;
 
@@ -42,7 +41,7 @@ export class QueensGridSnapshot extends AbstractGridSnapshot {
 
   /**
    * @param {QueensGridCell} cell
-   * @returns {GridSnapshot}
+   * @returns {QueensGridSnapshot}
    */
   placeQueen(cell) {
     const newSnapshot = this.clone();

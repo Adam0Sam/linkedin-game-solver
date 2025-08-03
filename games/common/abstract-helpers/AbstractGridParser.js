@@ -87,8 +87,6 @@ export class AbstractGridParser extends AbstractClass {
 
     const cellElements = gridElement.querySelectorAll("[data-cell-idx]");
 
-    console.log("Grid elements found:", cellElements);
-
     for (const cellElement of cellElements) {
       const { row, column } = this.extractCellPosition(cellElement, columns);
       grid[row][column] = cellElement;
