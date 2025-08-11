@@ -1,5 +1,6 @@
 import { Path } from "./Path.js";
 import { ZipGridCell } from "../ZipGridCell.js";
+import { AbstractGridCell } from "../../common/abstract-helpers/AbstractGridCell.js";
 
 export class PathCollection {
   /**
@@ -84,9 +85,15 @@ export class PathCollection {
      */
     const dfs = (currentCell, currentPath) => {
       const nextCells = this.#findNextTraversableCells(currentCell);
+      console.log(
+        "Curr: ",
+        AbstractGridCell.toString(currentCell),
+        "Next cells: ",
+        nextCells.map((c) => AbstractGridCell.toString(c))
+      );
 
       for (const nextCell of nextCells) {
-        const cellId = nextCell.toString();
+        const cellId = AbstractGridCell.toString(nextCell);
 
         if (visited.has(cellId)) {
           continue;
@@ -94,18 +101,24 @@ export class PathCollection {
 
         visited.add(cellId);
 
+        currentPath.appendInterCell(nextCell);
+
         if (ZipGridCell.areNeighbours(nextCell, this.endCell)) {
-          currentPath.appendInterCell(nextCell);
           allPaths.push(currentPath.clone());
         } else {
-          currentPath.appendInterCell(nextCell);
           dfs(nextCell, currentPath);
-          currentPath.popInterCell();
         }
+
+        currentPath.popInterCell();
 
         visited.delete(cellId);
       }
     };
+
+    if (ZipGridCell.areNeighbours(this.startCell, this.endCell)) {
+      const directPath = new Path(this.startCell, this.endCell);
+      allPaths.push(directPath);
+    }
 
     visited.add(this.startCell.toString());
     const initialPath = new Path(this.startCell, this.endCell);

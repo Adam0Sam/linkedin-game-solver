@@ -1,3 +1,4 @@
+import { AbstractGridCell } from "../../common/abstract-helpers/AbstractGridCell.js";
 import { QueensGridCell } from "../QueensGridCell.js";
 
 export class ColorGroup {
@@ -20,7 +21,7 @@ export class ColorGroup {
     if (!(cell instanceof QueensGridCell)) {
       cell = new QueensGridCell(cell.col, cell.row, this.color, cell.cellState);
     }
-    this.cellIds.add(cell.toString());
+    this.cellIds.add(AbstractGridCell.toString(cell));
   }
 
   /**

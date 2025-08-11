@@ -20,10 +20,11 @@ export class AbstractGridCell extends AbstractClass {
   }
 
   /**
+   * @param {AbstractGridCell} cell
    * @returns {string}
    */
-  toString() {
-    return `${this.row},${this.col}`;
+  static toString(cell) {
+    return `${cell.row},${cell.col}`;
   }
 
   /**

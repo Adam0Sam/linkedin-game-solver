@@ -3,6 +3,52 @@ import { ZipGridCell } from "../ZipGridCell.js";
 import { ZipGridSnapshot } from "../ZipGridSnapshot.js";
 import { PathCollection } from "./PathCollection.js";
 
+/**
+ * Utility function to print a zip game grid snapshot to the console
+ * @param {ZipGridSnapshot} snapshot - The zip grid snapshot to print
+ * @param {string} [title="Grid Snapshot"] - Optional title for the console output
+ */
+function printZipGridSnapshot(snapshot, title = "Grid Snapshot") {
+  if (!snapshot || !snapshot.grid) {
+    console.log(`${title}: Invalid snapshot`);
+    return;
+  }
+
+  console.log(`\n=== ${title} ===`);
+  console.log(`Grid Size: ${snapshot.gridSize}x${snapshot.gridSize}`);
+  console.log(`Has Solution: ${snapshot.hasSolution()}`);
+
+  // Create a visual representation of the grid
+  const gridLines = [];
+  for (let row = 0; row < snapshot.gridSize; row++) {
+    let line = "";
+    for (let col = 0; col < snapshot.gridSize; col++) {
+      const cell = snapshot.grid[row][col];
+      let symbol;
+
+      if (cell.cellState === "cross") {
+        symbol = "X";
+      } else if (typeof cell.cellContent === "number") {
+        // Show the actual number for numbered cells
+        symbol = cell.cellContent.toString();
+      } else if (cell.cellContent === "wall") {
+        symbol = "█";
+      } else if (cell.cellContent === "blank") {
+        symbol = ".";
+      } else {
+        symbol = "?";
+      }
+
+      line += `${symbol.toString().padStart(2)} `;
+    }
+    gridLines.push(`${row}: ${line}`);
+  }
+
+  console.log("Grid:");
+  gridLines.forEach((line) => console.log(line));
+  console.log(`==================\n`);
+}
+
 export class ZipGameSolver extends AbstractGameSolver {
   constructor() {
     super(ZipGridCell);
@@ -45,11 +91,17 @@ export class ZipGameSolver extends AbstractGameSolver {
 
     const allPaths = pathCollection.getAllPaths();
     console.log(
-      `${startCell.cellContent} to ${endCell.cellContent} paths:`,
-      allPaths.length
+      `${startCell.cellContent} => ${endCell.cellContent} paths:`,
+      allPaths
     );
     for (const path of allPaths) {
       const nextSnapshot = currentGridSnapshot.traversePath(path);
+
+      printZipGridSnapshot(
+        nextSnapshot,
+        `${startCell.cellContent} => ${endCell.cellContent}`
+      );
+
       const solutionSnapshot = this.#explorePaths(
         nextSnapshot,
         cellContentNumber + 1
@@ -70,7 +122,6 @@ export class ZipGameSolver extends AbstractGameSolver {
     for (const row of grid) {
       for (const cell of row) {
         if (typeof cell.cellContent === "number") {
-          console.log("Found numbered cell:", cell);
           this.#numberedCellDict[cell.cellContent] = cell;
           this.#highestCellContentNumber = Math.max(
             this.#highestCellContentNumber,
