@@ -67,7 +67,7 @@ export class ZipGameSolver extends AbstractGameSolver {
    * @param {number} cellContentNumber
    * @param {Path[]} paths
    * @private
-   * @return {ZipGridSnapshot|null}
+   * @return {Path[]|null}
    */
   #explorePaths(currentGridSnapshot, cellContentNumber, paths) {
     if (cellContentNumber >= this.#highestCellContentNumber) {
