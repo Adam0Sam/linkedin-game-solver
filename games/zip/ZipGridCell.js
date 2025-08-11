@@ -22,19 +22,20 @@ export class ZipGridCell extends AbstractGridCell {
   }
 
   /**
-   * @returns {boolean}
+   * @param {ZipGridCell} cell
    */
-  isTraversable() {
-    return this.cellContent === "blank" && this.cellState === "empty";
+  static isTraversable(cell) {
+    return cell.cellContent === "blank" && cell.cellState === "empty";
   }
 
   /**
-   * @param {ZipGridCell} cell
+   * @param {ZipGridCell} cellA
+   * @param {ZipGridCell} cellB
    */
-  isNeighborOf(cell) {
+  static areNeighbours(cellA, cellB) {
     return (
-      (this.col === cell.col && Math.abs(this.row - cell.row) === 1) ||
-      (this.row === cell.row && Math.abs(this.col - cell.col) === 1)
+      (cellA.col === cellB.col && Math.abs(cellA.row - cellB.row) === 1) ||
+      (cellA.row === cellB.row && Math.abs(cellA.col - cellB.col) === 1)
     );
   }
 

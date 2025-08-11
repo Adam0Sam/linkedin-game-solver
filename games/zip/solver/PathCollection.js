@@ -1,4 +1,5 @@
 import { Path } from "./Path.js";
+import { ZipGridCell } from "../ZipGridCell.js";
 
 export class PathCollection {
   /**
@@ -54,7 +55,7 @@ export class PathCollection {
         newCol < this.grid[0].length
       ) {
         const nextCell = this.grid[newRow][newCol];
-        if (nextCell && nextCell.isTraversable()) {
+        if (nextCell && ZipGridCell.isTraversable(nextCell)) {
           traversableCells.push(nextCell);
         }
       }
@@ -93,7 +94,7 @@ export class PathCollection {
 
         visited.add(cellId);
 
-        if (nextCell.isNeighborOf(this.endCell)) {
+        if (ZipGridCell.areNeighbours(nextCell, this.endCell)) {
           currentPath.appendInterCell(nextCell);
           allPaths.push(currentPath.clone());
         } else {

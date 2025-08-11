@@ -44,6 +44,10 @@ export class ZipGameSolver extends AbstractGameSolver {
     );
 
     const allPaths = pathCollection.getAllPaths();
+    console.log(
+      `${startCell.cellContent} to ${endCell.cellContent} paths:`,
+      allPaths.length
+    );
     for (const path of allPaths) {
       const nextSnapshot = currentGridSnapshot.traversePath(path);
       const solutionSnapshot = this.#explorePaths(
