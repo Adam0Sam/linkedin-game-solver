@@ -67,12 +67,13 @@ export class ZipGameSolver extends AbstractGameSolver {
   /**
    * @param {ZipGridSnapshot} currentGridSnapshot
    * @param {number} cellContentNumber
+   * @param {Path[]} paths
    * @private
    * @return {ZipGridSnapshot|null}
    */
-  #explorePaths(currentGridSnapshot, cellContentNumber) {
+  #explorePaths(currentGridSnapshot, cellContentNumber, paths) {
     if (cellContentNumber >= this.#highestCellContentNumber) {
-      return currentGridSnapshot.hasSolution() ? currentGridSnapshot : null;
+      return currentGridSnapshot.hasSolution() ? paths : null;
     }
 
     /**
@@ -90,10 +91,6 @@ export class ZipGameSolver extends AbstractGameSolver {
     );
 
     const allPaths = pathCollection.getAllPaths();
-    // console.log(
-    //   `${startCell.cellContent} => ${endCell.cellContent} paths:`,
-    //   allPaths
-    // );
     for (const path of allPaths) {
       const nextSnapshot = currentGridSnapshot.traversePath(path);
 
@@ -102,13 +99,14 @@ export class ZipGameSolver extends AbstractGameSolver {
         `${startCell.cellContent} => ${endCell.cellContent}`
       );
 
-      const solutionSnapshot = this.#explorePaths(
+      const solutionPaths = this.#explorePaths(
         nextSnapshot,
-        cellContentNumber + 1
+        cellContentNumber + 1,
+        [...paths, path]
       );
 
-      if (solutionSnapshot) {
-        return solutionSnapshot;
+      if (solutionPaths) {
+        return solutionPaths;
       }
     }
 
@@ -132,7 +130,7 @@ export class ZipGameSolver extends AbstractGameSolver {
     }
 
     const initialSnapshot = new ZipGridSnapshot(grid);
-    const solutionSnapshot = this.#explorePaths(initialSnapshot, 1);
+    const solutionSnapshot = this.#explorePaths(initialSnapshot, 1, []);
     return solutionSnapshot;
   }
 }
