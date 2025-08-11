@@ -1,14 +1,27 @@
 import { AbstractGridSnapshot } from "../common/abstract-helpers/AbstractGridSnapshot.js";
 import { Path } from "./solver/Path.js";
-import { ZipGridCell } from "./ZipGridCell.js";
 
 export class ZipGridSnapshot extends AbstractGridSnapshot {
   #traversedCellCount = 0;
+
   /**
    * @param {number} count
    */
-  increaseTraversedCellCount(count) {
-    this.#traversedCellCount += count;
+  setTraversedCellCount(count) {
+    this.#traversedCellCount = count;
+  }
+
+  getTraversedCellCount() {
+    return this.#traversedCellCount;
+  }
+
+  /**
+   * @returns {ZipGridSnapshot}
+   */
+  clone() {
+    const cloned = super.clone();
+    cloned.setTraversedCellCount(this.#traversedCellCount);
+    return cloned;
   }
 
   /**
@@ -20,14 +33,24 @@ export class ZipGridSnapshot extends AbstractGridSnapshot {
      */
     const newSnapshot = this.clone();
     const pathCells = path.getPathCells();
-    newSnapshot.increaseTraversedCellCount(pathCells.length);
+    let newlyTraversedCount = 0;
+
     for (const cell of pathCells) {
+      const currentCell = newSnapshot.getCellByCoord(cell.row, cell.col);
+      if (currentCell && currentCell.cellState !== "cross") {
+        newlyTraversedCount++;
+      }
       newSnapshot.setCellState(cell, "cross");
     }
+
+    const currentTraversedCount = this.getTraversedCellCount();
+    newSnapshot.setTraversedCellCount(
+      currentTraversedCount + newlyTraversedCount
+    );
     return newSnapshot;
   }
 
   hasSolution() {
-    return this.#traversedCellCount === this.gridSize * this.gridSize;
+    return this.getTraversedCellCount() === this.gridSize * this.gridSize;
   }
 }

@@ -85,12 +85,12 @@ export class PathCollection {
      */
     const dfs = (currentCell, currentPath) => {
       const nextCells = this.#findNextTraversableCells(currentCell);
-      console.log(
-        "Curr: ",
-        AbstractGridCell.toString(currentCell),
-        "Next cells: ",
-        nextCells.map((c) => AbstractGridCell.toString(c))
-      );
+      // console.log(
+      //   "Curr: ",
+      //   AbstractGridCell.toString(currentCell),
+      //   "Next cells: ",
+      //   nextCells.map((c) => AbstractGridCell.toString(c))
+      // );
 
       for (const nextCell of nextCells) {
         const cellId = AbstractGridCell.toString(nextCell);

@@ -14,7 +14,7 @@ function printZipGridSnapshot(snapshot, title = "Grid Snapshot") {
     return;
   }
 
-  console.log(`\n=== ${title} ===`);
+  console.group(`\n=== ${title} ===`);
   console.log(`Grid Size: ${snapshot.gridSize}x${snapshot.gridSize}`);
   console.log(`Has Solution: ${snapshot.hasSolution()}`);
 
@@ -46,7 +46,7 @@ function printZipGridSnapshot(snapshot, title = "Grid Snapshot") {
 
   console.log("Grid:");
   gridLines.forEach((line) => console.log(line));
-  console.log(`==================\n`);
+  console.groupEnd(`==================\n`);
 }
 
 export class ZipGameSolver extends AbstractGameSolver {
@@ -90,10 +90,10 @@ export class ZipGameSolver extends AbstractGameSolver {
     );
 
     const allPaths = pathCollection.getAllPaths();
-    console.log(
-      `${startCell.cellContent} => ${endCell.cellContent} paths:`,
-      allPaths
-    );
+    // console.log(
+    //   `${startCell.cellContent} => ${endCell.cellContent} paths:`,
+    //   allPaths
+    // );
     for (const path of allPaths) {
       const nextSnapshot = currentGridSnapshot.traversePath(path);
 
