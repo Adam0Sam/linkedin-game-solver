@@ -18,7 +18,6 @@ function printZipGridSnapshot(snapshot, title = "Grid Snapshot") {
   console.log(`Grid Size: ${snapshot.gridSize}x${snapshot.gridSize}`);
   console.log(`Has Solution: ${snapshot.hasSolution()}`);
 
-  // Create a visual representation of the grid
   const gridLines = [];
   for (let row = 0; row < snapshot.gridSize; row++) {
     let line = "";
@@ -29,7 +28,6 @@ function printZipGridSnapshot(snapshot, title = "Grid Snapshot") {
       if (cell.cellState === "cross") {
         symbol = "X";
       } else if (typeof cell.cellContent === "number") {
-        // Show the actual number for numbered cells
         symbol = cell.cellContent.toString();
       } else if (cell.cellContent === "wall") {
         symbol = "█";
@@ -93,11 +91,6 @@ export class ZipGameSolver extends AbstractGameSolver {
     const allPaths = pathCollection.getAllPaths();
     for (const path of allPaths) {
       const nextSnapshot = currentGridSnapshot.traversePath(path);
-
-      printZipGridSnapshot(
-        nextSnapshot,
-        `${startCell.cellContent} => ${endCell.cellContent}`
-      );
 
       const solutionPaths = this.#explorePaths(
         nextSnapshot,
