@@ -11,6 +11,13 @@ export class ZipGridSnapshot extends AbstractGridSnapshot {
     this.#traversedCellCount = count;
   }
 
+  /**
+   * @param {number} count
+   */
+  incrementTraversedCellCount(count) {
+    this.#traversedCellCount += count;
+  }
+
   getTraversedCellCount() {
     return this.#traversedCellCount;
   }
@@ -43,10 +50,7 @@ export class ZipGridSnapshot extends AbstractGridSnapshot {
       newSnapshot.setCellState(cell, "cross");
     }
 
-    const currentTraversedCount = this.getTraversedCellCount();
-    newSnapshot.setTraversedCellCount(
-      currentTraversedCount + newlyTraversedCount
-    );
+    newSnapshot.incrementTraversedCellCount(newlyTraversedCount);
     return newSnapshot;
   }
 
