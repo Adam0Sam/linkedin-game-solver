@@ -10,6 +10,12 @@ import {
   ZipSolutionExecutor,
 } from "./games/zip/index.js";
 
+import {
+  TangoGameSolver,
+  TangoGridParser,
+  TangoSolutionExecutor,
+} from "./games/tango/index.js";
+
 export class StaticGameRegistry {
   /**
    * @type {{string, AbstractGameParser}}
@@ -30,16 +36,19 @@ export class StaticGameRegistry {
     this.#parserMap = {
       queens: new QueensGridParser(),
       zip: new ZipGridParser(),
+      tango: new TangoGridParser(),
     };
     this.#solverMap = {
       queens: new QueensGameSolver(),
-      // WIP
       zip: new ZipGameSolver(),
+      // WIP
+      tango: new TangoGameSolver(),
     };
     this.#executorMap = {
       queens: new QueensSolutionExecutor(),
-      // WIP
       zip: new ZipSolutionExecutor(),
+      // WIP
+      tango: new TangoSolutionExecutor(),
     };
   }
 

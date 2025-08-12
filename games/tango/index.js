@@ -1,3 +1,3 @@
-export * from './TangoGameSolver';
-export * from './TangoGridParser';
-export * from './TangoSolutionExecutor';
+export * from "./TangoGameSolver.js";
+export * from "./TangoGridParser.js";
+export * from "./TangoSolutionExecutor.js";
