@@ -12,6 +12,7 @@ export class ZipSolutionExecutor extends AbstractSolutionExecutor {
    * @param {Path[]} paths
    */
   getSolutionClickSequence(paths) {
+    console.log();
     const clickSequence = [];
     for (const path of paths) {
       const pathCells = [path.startCell, ...path.interCells, path.endCell];
