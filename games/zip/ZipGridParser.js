@@ -3,7 +3,7 @@ import { ZipGridCell } from "./ZipGridCell.js";
 
 export class ZipGridParser extends AbstractGridParser {
   constructor() {
-    super(".trail-grid");
+    super(".trail-grid", ".trail-cell-wall");
   }
 
   /**

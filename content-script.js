@@ -21,8 +21,9 @@ function handleGetGameGrid(request, sendResponse) {
   try {
     const gameParser = gameRegistry.getParser(request.gameType);
     const gameGrid = gameParser.parseToGameCellGrid(document);
+    const edgeModifierGrid = gameParser.parseToEdgeModifierGrid(document);
 
-    sendResponse({ grid: gameGrid });
+    sendResponse({ gameGrid, edgeModifierGrid });
   } catch (error) {
     console.error("Error parsing game grid:", error);
     sendResponse({ error: error.message });

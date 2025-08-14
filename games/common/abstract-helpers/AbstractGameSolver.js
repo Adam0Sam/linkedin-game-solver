@@ -29,21 +29,23 @@ export class AbstractGameSolver extends AbstractClass {
   /**
    * @abstract
    * @param {AbstractGridCell[][]} grid
+   * @param {AbstractGridCell[][]|null} edgeModifierGrid
    * @returns {AbstractGridCell[][]}
    */
-  getSolvedGrid(grid) {
+  getSolvedGrid(grid, edgeModifierGrid) {
     throw new NotImplementedError("getSolvedGrid");
   }
 
   /**
    * @param {AbstractGridCell[][]} grid
+   * @param {AbstractGridCell[][]|null} edgeModifierGrid
    * @returns {AbstractGridCell[][]}
    */
-  solve(grid) {
+  solve(grid, edgeModifierGrid) {
     const parsedGrid = grid.map((row) =>
       row.map((cell) => this.cellClass.toValidCell(cell))
     );
 
-    return this.getSolvedGrid(parsedGrid);
+    return this.getSolvedGrid(parsedGrid, edgeModifierGrid);
   }
 }

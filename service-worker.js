@@ -14,9 +14,13 @@ function handleSolveGame(sendResponse) {
           sendResponse({ error: response?.error || "Failed to get game grid" });
           return;
         }
-        console.log("Game grid received:", response.grid);
-        const solutionGrid = solver.solve(response.grid);
-        console.log("Solution grid:", solutionGrid);
+
+        console.log("Game grid received:", response.gameGrid);
+        console.log("Edge modifier grid:", response.edgeModifierGrid);
+        const solutionGrid = solver.solve(
+          response.gameGrid,
+          response.edgeModifierGrid
+        );
 
         chrome.tabs.sendMessage(
           tabs[0].id,
