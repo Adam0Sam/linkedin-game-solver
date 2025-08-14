@@ -1,3 +1,4 @@
+import { EdgeModifierGrid } from "../EdgeModifierGrid.js";
 import { AbstractClass, NotImplementedError } from "./AbstractClass.js";
 
 export class AbstractGameSolver extends AbstractClass {
@@ -28,24 +29,28 @@ export class AbstractGameSolver extends AbstractClass {
 
   /**
    * @abstract
-   * @param {AbstractGridCell[][]} grid
-   * @param {AbstractGridCell[][]|null} edgeModifierGrid
+   * @param {AbstractGridCell[][]} gameGrid
+   * @param {EdgeModifierGrid|null} edgeModifierGrid
    * @returns {AbstractGridCell[][]}
    */
-  getSolvedGrid(grid, edgeModifierGrid) {
+  getSolvedGrid(gameGrid, edgeModifierGrid) {
     throw new NotImplementedError("getSolvedGrid");
   }
 
   /**
-   * @param {AbstractGridCell[][]} grid
-   * @param {AbstractGridCell[][]|null} edgeModifierGrid
+   * @param {AbstractGridCell[][]} gameGrid
+   * @param {object[][]|null} rawEdgeModifierGrid
    * @returns {AbstractGridCell[][]}
    */
-  solve(grid, edgeModifierGrid) {
-    const parsedGrid = grid.map((row) =>
+  solve(gameGrid, rawEdgeModifierGrid) {
+    const parsedGrid = gameGrid.map((row) =>
       row.map((cell) => this.cellClass.toValidCell(cell))
     );
 
-    return this.getSolvedGrid(parsedGrid, edgeModifierGrid);
+    const parsedEdgeModifierGrid = rawEdgeModifierGrid
+      ? new EdgeModifierGrid(rawEdgeModifierGrid)
+      : null;
+
+    return this.getSolvedGrid(parsedGrid, parsedEdgeModifierGrid);
   }
 }

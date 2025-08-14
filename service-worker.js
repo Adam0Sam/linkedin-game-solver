@@ -17,10 +17,13 @@ function handleSolveGame(sendResponse) {
 
         console.log("Game grid received:", response.gameGrid);
         console.log("Edge modifier grid:", response.edgeModifierGrid);
+
         const solutionGrid = solver.solve(
           response.gameGrid,
           response.edgeModifierGrid
         );
+
+        console.log("Solution grid:", solutionGrid);
 
         chrome.tabs.sendMessage(
           tabs[0].id,
