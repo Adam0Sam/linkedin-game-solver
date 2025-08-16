@@ -29,17 +29,6 @@ export class ZipGridCell extends AbstractGridCell {
   }
 
   /**
-   * @param {ZipGridCell} cellA
-   * @param {ZipGridCell} cellB
-   */
-  static areNeighbours(cellA, cellB) {
-    return (
-      (cellA.col === cellB.col && Math.abs(cellA.row - cellB.row) === 1) ||
-      (cellA.row === cellB.row && Math.abs(cellA.col - cellB.col) === 1)
-    );
-  }
-
-  /**
    * @param {object} object
    */
   static isValidCell(object) {

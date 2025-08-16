@@ -2,6 +2,7 @@ import { AbstractGameSolver } from "../../common/abstract-helpers/AbstractGameSo
 import { ZipGridCell } from "../ZipGridCell.js";
 import { ZipGridSnapshot } from "../ZipGridSnapshot.js";
 import { PathCollection } from "./PathCollection.js";
+import { EdgeModifierGrid } from "../../common/EdgeModifierGrid.js";
 
 /**
  * Utility function to print a zip game grid snapshot to the console
@@ -14,8 +15,7 @@ function printZipGridSnapshot(snapshot, title = "Grid Snapshot") {
     return;
   }
 
-  console.group(`\n=== ${title} ===`);
-  console.log(`Grid Size: ${snapshot.gridSize}x${snapshot.gridSize}`);
+  console.group(title);
   console.log(`Has Solution: ${snapshot.hasSolution()}`);
 
   const gridLines = [];
@@ -44,7 +44,7 @@ function printZipGridSnapshot(snapshot, title = "Grid Snapshot") {
 
   console.log("Grid:");
   gridLines.forEach((line) => console.log(line));
-  console.groupEnd(`==================\n`);
+  console.groupEnd(`==================`);
 }
 
 export class ZipGameSolver extends AbstractGameSolver {
@@ -61,6 +61,11 @@ export class ZipGameSolver extends AbstractGameSolver {
    * @type {number}
    */
   #highestCellContentNumber = 0;
+
+  /**
+   * @type {EdgeModifierGrid}
+   */
+  #edgeModifierGrid;
 
   /**
    * @param {ZipGridSnapshot} currentGridSnapshot
@@ -85,12 +90,18 @@ export class ZipGameSolver extends AbstractGameSolver {
     const pathCollection = new PathCollection(
       startCell,
       endCell,
-      currentGridSnapshot.grid
+      currentGridSnapshot.grid,
+      this.#edgeModifierGrid
     );
 
     const allPaths = pathCollection.getAllPaths();
     for (const path of allPaths) {
       const nextSnapshot = currentGridSnapshot.traversePath(path);
+
+      // printZipGridSnapshot(
+      //   nextSnapshot,
+      //   `${startCell.cellContent} => ${endCell.cellContent}`
+      // );
 
       const solutionPaths = this.#explorePaths(
         nextSnapshot,
@@ -107,10 +118,13 @@ export class ZipGameSolver extends AbstractGameSolver {
   }
 
   /**
-   * @param {ZipGridCell[][]} grid
+   * @param {ZipGridCell[][]} gameGrid
+   * @param {EdgeModifierGrid} edgeModifierGrid
    */
-  getSolvedGrid(grid) {
-    for (const row of grid) {
+  getSolvedGrid(gameGrid, edgeModifierGrid) {
+    this.#edgeModifierGrid = edgeModifierGrid;
+
+    for (const row of gameGrid) {
       for (const cell of row) {
         if (typeof cell.cellContent === "number") {
           this.#numberedCellDict[cell.cellContent] = cell;
@@ -122,7 +136,7 @@ export class ZipGameSolver extends AbstractGameSolver {
       }
     }
 
-    const initialSnapshot = new ZipGridSnapshot(grid);
+    const initialSnapshot = new ZipGridSnapshot(gameGrid);
     const solutionSnapshot = this.#explorePaths(initialSnapshot, 1, []);
     return solutionSnapshot;
   }

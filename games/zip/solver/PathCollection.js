@@ -1,14 +1,16 @@
 import { Path } from "./Path.js";
 import { ZipGridCell } from "../ZipGridCell.js";
 import { AbstractGridCell } from "../../common/abstract-helpers/AbstractGridCell.js";
+import { EdgeModifierGrid } from "../../common/EdgeModifierGrid.js";
 
 export class PathCollection {
   /**
    * @param {ZipGridCell} startCell
    * @param {ZipGridCell} endCell
-   * @param {ZipGridCell[][]} grid
+   * @param {ZipGridCell[][]} gameGrid
+   * @param {EdgeModifierGrid} edgeModifierGrid
    */
-  constructor(startCell, endCell, grid) {
+  constructor(startCell, endCell, gameGrid, edgeModifierGrid) {
     /**
      * @type {ZipGridCell}
      */
@@ -21,12 +23,17 @@ export class PathCollection {
     /**
      * @type {ZipGridCell[][]}
      */
-    this.grid = grid;
+    this.gameGrid = gameGrid;
 
     /**
      * @type {Array<Path> | null}
      */
     this.paths = null;
+
+    /**
+     * @type {EdgeModifierGrid}
+     */
+    this.edgeModifierGrid = edgeModifierGrid;
   }
 
   /**
@@ -51,12 +58,19 @@ export class PathCollection {
 
       if (
         newRow >= 0 &&
-        newRow < this.grid.length &&
+        newRow < this.gameGrid.length &&
         newCol >= 0 &&
-        newCol < this.grid[0].length
+        newCol < this.gameGrid[0].length
       ) {
-        const nextCell = this.grid[newRow][newCol];
-        if (nextCell && ZipGridCell.isTraversable(nextCell)) {
+        const nextCell = this.gameGrid[newRow][newCol];
+        if (
+          nextCell &&
+          ZipGridCell.isTraversable(nextCell) &&
+          !this.edgeModifierGrid.areCellsConnectedByModifier(
+            currentCell,
+            nextCell
+          )
+        ) {
           traversableCells.push(nextCell);
         }
       }
@@ -99,9 +113,9 @@ export class PathCollection {
 
         if (ZipGridCell.areNeighbours(nextCell, this.endCell)) {
           allPaths.push(currentPath.clone());
-        } else {
-          dfs(nextCell, currentPath);
         }
+
+        dfs(nextCell, currentPath);
 
         currentPath.popInterCell();
 
@@ -114,7 +128,6 @@ export class PathCollection {
       allPaths.push(directPath);
     }
 
-    visited.add(this.startCell.toString());
     const initialPath = new Path(this.startCell, this.endCell);
     dfs(this.startCell, initialPath);
 
