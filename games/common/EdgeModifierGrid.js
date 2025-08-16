@@ -32,6 +32,14 @@ export class EdgeModifierGrid {
   }
 
   /**
+   * @param {AbstractGridCell} cell
+   */
+  getModifierContent(cell) {
+    const gridCell = this.grid[cell.row][cell.col];
+    return gridCell ? gridCell.content : null;
+  }
+
+  /**
    * @param {AbstractGridCell} cell1
    * @param {AbstractGridCell} cell2
    */

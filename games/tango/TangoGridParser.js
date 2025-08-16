@@ -3,7 +3,7 @@ import { TangoGridCell } from "./TangoGridCell.js";
 
 export class TangoGridParser extends AbstractGridParser {
   constructor() {
-    super(".lotka-grid");
+    super(".lotka-grid", ".lotka-cell-edge");
   }
 
   /**
@@ -17,6 +17,8 @@ export class TangoGridParser extends AbstractGridParser {
       ".lotka-cell-content"
     ).firstElementChild;
     const cellState = cellContentElement.ariaLabel.toLocaleLowerCase();
-    return new TangoGridCell(columnIndex, rowIndex, cellState);
+    const isLocked =
+      cellContentElement.classList.contains("lotka-cell--locked");
+    return new TangoGridCell(columnIndex, rowIndex, cellState, isLocked);
   }
 }

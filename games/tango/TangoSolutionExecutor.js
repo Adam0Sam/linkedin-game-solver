@@ -1,11 +1,11 @@
-import { AbstractSolutionExecutor } from '../common/abstract-helpers/AbstractSolutionExecutor.js';
+import { AbstractSolutionExecutor } from "../common/abstract-helpers/AbstractSolutionExecutor.js";
 
 export class TangoSolutionExecutor extends AbstractSolutionExecutor {
-    constructor() {
-        super();
-    }
+  constructor() {
+    super();
+  }
 
-    execute(solution) {
-        // Barebones execute method
-    }
+  execute(solution) {
+    // Barebones execute method
+  }
 }

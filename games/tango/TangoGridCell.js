@@ -4,15 +4,21 @@ export class TangoGridCell extends AbstractGridCell {
   /**
    * @param {number} col
    * @param {number} row
-   * @param {"moon"|"sun"|"empty"|"cross"}
+   * @param {"moon"|"sun"|"empty"} cellState
+   * @param {boolean} isLocked
    */
-  constructor(col, row, cellState) {
+  constructor(col, row, cellState, isLocked) {
     super(col, row);
 
     /**
-     * @param {"moon"|"sun"|"empty"|"cross"}
+     * @type {"moon"|"sun"|"empty"}
      */
     this.cellState = cellState;
+
+    /**
+     * @type {boolean}
+     */
+    this.isLocked = isLocked;
   }
 
   static isValidCell(object) {
@@ -20,7 +26,6 @@ export class TangoGridCell extends AbstractGridCell {
       AbstractGridCell.isValidCell(object) &&
       (object.cellState === "moon" ||
         object.cellState === "sun" ||
-        object.cellState === "cross" ||
         object.cellState === "empty")
     );
   }
@@ -30,5 +35,9 @@ export class TangoGridCell extends AbstractGridCell {
       throw new Error("Invalid TangoGridCell object");
     }
     return new TangoGridCell(object.col, object.row, object.cellState);
+  }
+
+  static getFilledStates() {
+    return ["moon", "sun"];
   }
 }

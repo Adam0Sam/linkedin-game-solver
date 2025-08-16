@@ -98,11 +98,6 @@ export class ZipGameSolver extends AbstractGameSolver {
     for (const path of allPaths) {
       const nextSnapshot = currentGridSnapshot.traversePath(path);
 
-      // printZipGridSnapshot(
-      //   nextSnapshot,
-      //   `${startCell.cellContent} => ${endCell.cellContent}`
-      // );
-
       const solutionPaths = this.#explorePaths(
         nextSnapshot,
         cellContentNumber + 1,
