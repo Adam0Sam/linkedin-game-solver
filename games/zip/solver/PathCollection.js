@@ -113,9 +113,9 @@ export class PathCollection {
 
         if (ZipGridCell.areNeighbours(nextCell, this.endCell)) {
           allPaths.push(currentPath.clone());
-        } else {
-          dfs(nextCell, currentPath);
         }
+
+        dfs(nextCell, currentPath);
 
         currentPath.popInterCell();
 
@@ -128,7 +128,6 @@ export class PathCollection {
       allPaths.push(directPath);
     }
 
-    visited.add(this.startCell.toString());
     const initialPath = new Path(this.startCell, this.endCell);
     dfs(this.startCell, initialPath);
 
