@@ -34,7 +34,7 @@ export class AbstractGridParser extends AbstractClass {
    * @returns {string|null}
    */
   extractEdgeModifierContent(domElement) {
-    return null; // Default implementation, can be overridden
+    return domElement.firstElementChild?.ariaLabel?.toLowerCase() ?? null;
   }
 
   /**

@@ -51,8 +51,19 @@ export class TangoRowCollection {
   }
 
   #followsCountConstraints(cell, currRow) {
-    const count = currRow.filter((c) => c.cellState === cell.cellState).length;
-    return count <= 3;
+    const rowCount = currRow.filter(
+      (c) => c.cellState === cell.cellState
+    ).length;
+
+    let columnCount = 1;
+    for (let i = 0; i < this.rowIndex; i++) {
+      const colCell = this.gameGrid[i][cell.col];
+      if (colCell.cellState === cell.cellState) {
+        columnCount++;
+      }
+    }
+
+    return rowCount < 3 && columnCount <= 3;
   }
 
   /**
@@ -99,7 +110,7 @@ export class TangoRowCollection {
      * @type {TangoGridCell[][]}
      */
     const allValidRows = [];
-    const maxCol = this.gameGrid[0].length;
+    const gridLength = this.gameGrid[0].length;
 
     /**
      *
@@ -108,24 +119,33 @@ export class TangoRowCollection {
      * @returns
      */
     const dfs = (currColIndex, currRow) => {
-      if (currColIndex >= maxCol) {
-        allValidRows.push(currRow);
+      if (currColIndex >= gridLength) {
+        allValidRows.push([...currRow]);
         return;
       }
 
-      for (let col = currColIndex; col < maxCol; col++) {
-        for (let state of TangoGridCell.getFilledStates()) {
-          const existingCell = this.gameGrid[this.rowIndex][col];
+      const existingCell = this.gameGrid[this.rowIndex][currColIndex];
 
-          if (existingCell.isLocked) {
-            dfs(col + 1, [...currRow, existingCell]);
-            continue;
-          }
+      if (existingCell.isLocked) {
+        if (this.#followsConstraints(existingCell, currRow)) {
+          currRow.push(existingCell);
+          dfs(currColIndex + 1, currRow);
+          currRow.pop();
+        }
+        return;
+      }
 
-          const newCell = new TangoGridCell(col, this.rowIndex, state, false);
-          if (this.#followsConstraints(newCell, currRow)) {
-            dfs(col + 1, [...currRow, newCell]);
-          }
+      for (let state of TangoGridCell.getFilledStates()) {
+        const newCell = new TangoGridCell(
+          currColIndex,
+          this.rowIndex,
+          state,
+          false
+        );
+        if (this.#followsConstraints(newCell, currRow)) {
+          currRow.push(newCell);
+          dfs(currColIndex + 1, currRow);
+          currRow.pop();
         }
       }
     };

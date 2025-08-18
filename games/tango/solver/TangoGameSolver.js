@@ -71,7 +71,7 @@ export class TangoGameSolver extends AbstractGameSolver {
 
     for (const validRow of allValidRows) {
       const nextSnapshot = currentSnapshot.crossRow(validRow);
-      printTangoGridSnapshot(nextSnapshot, `Row ${rowIndex}`);
+      // printTangoGridSnapshot(nextSnapshot, `Row ${rowIndex}`);
       const solutionSnapshot = this.#exploreRows(nextSnapshot, rowIndex + 1);
       if (solutionSnapshot) return solutionSnapshot;
     }
@@ -85,12 +85,7 @@ export class TangoGameSolver extends AbstractGameSolver {
    */
   getSolvedGrid(gameGrid, edgeModifierGrid) {
     this.#edgeModifierGrid = edgeModifierGrid;
-    // console.log("Starting Tango Game Solver...", gameGrid);
     const initialSnapshot = new TangoGridSnapshot(gameGrid);
-
-    printTangoGridSnapshot(initialSnapshot, "Initial Snapshot");
-    // console.log(initialSnapshot.grid);
-
     const solutionSnapshot = this.#exploreRows(initialSnapshot, 0);
     return solutionSnapshot;
   }
