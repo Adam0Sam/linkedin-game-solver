@@ -34,9 +34,17 @@ export class TangoGridCell extends AbstractGridCell {
     if (!TangoGridCell.isValidCell(object)) {
       throw new Error("Invalid TangoGridCell object");
     }
-    return new TangoGridCell(object.col, object.row, object.cellState);
+    return new TangoGridCell(
+      object.col,
+      object.row,
+      object.cellState,
+      object.isLocked
+    );
   }
 
+  /**
+   * @returns {["moon","sun"]}
+   */
   static getFilledStates() {
     return ["moon", "sun"];
   }

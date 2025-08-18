@@ -13,7 +13,7 @@ export class TangoRowCollection {
      */
     this.rowIndex = rowIndex;
     /**
-     * @type {TangoGridCell[]|null}
+     * @type {TangoGridCell[][]|null}
      */
     this.rows = null;
     /**
@@ -28,24 +28,31 @@ export class TangoRowCollection {
 
   /**
    * @param {TangoGridCell} cell
+   * @param {TangoGridCell[]} currRow
    */
-  #followsSequenceConstraints(cell) {
+  #followsSequenceConstraints(cell, currRow) {
     if (
       cell.row > 1 &&
       this.gameGrid[cell.row - 1][cell.col].cellState === cell.cellState &&
       this.gameGrid[cell.row - 2][cell.col].cellState === cell.cellState
-    )
+    ) {
       return false;
+    }
 
     if (
-      cell.col > 1 &&
-      this.gameGrid[cell.row][cell.col - 1].cellState === cell.cellState &&
-      this.gameGrid[cell.row][cell.col - 2].cellState === cell.cellState
+      currRow.length >= 2 &&
+      currRow[currRow.length - 1].cellState === cell.cellState &&
+      currRow[currRow.length - 2].cellState === cell.cellState
     ) {
       return false;
     }
 
     return true;
+  }
+
+  #followsCountConstraints(cell, currRow) {
+    const count = currRow.filter((c) => c.cellState === cell.cellState).length;
+    return count <= 3;
   }
 
   /**
@@ -60,8 +67,9 @@ export class TangoRowCollection {
 
   /**
    * @param {TangoGridCell} cell
+   * @param {TangoGridCell[]} currRow
    */
-  #followsConstraints(cell) {
+  #followsConstraints(cell, currRow) {
     const leftNeighbour = this.gameGrid[cell.row][cell.col - 1];
     const topNeighbour = this.gameGrid[cell.row - 1]?.[cell.col];
 
@@ -77,7 +85,10 @@ export class TangoRowCollection {
       }
     }
 
-    return this.#followsSequenceConstraints(cell);
+    return (
+      this.#followsSequenceConstraints(cell, currRow) &&
+      this.#followsCountConstraints(cell, currRow)
+    );
   }
 
   /**
@@ -104,9 +115,15 @@ export class TangoRowCollection {
 
       for (let col = currColIndex; col < maxCol; col++) {
         for (let state of TangoGridCell.getFilledStates()) {
-          if (this.gameGrid[this.rowIndex][col].isLocked) continue;
+          const existingCell = this.gameGrid[this.rowIndex][col];
+
+          if (existingCell.isLocked) {
+            dfs(col + 1, [...currRow, existingCell]);
+            continue;
+          }
+
           const newCell = new TangoGridCell(col, this.rowIndex, state, false);
-          if (this.#followsConstraints(newCell)) {
+          if (this.#followsConstraints(newCell, currRow)) {
             dfs(col + 1, [...currRow, newCell]);
           }
         }
@@ -122,6 +139,7 @@ export class TangoRowCollection {
     if (!this.rows) {
       this.rows = this.#findAllValidRows();
     }
+
     return this.rows;
   }
 }

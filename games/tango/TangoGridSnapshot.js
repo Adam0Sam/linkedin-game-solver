@@ -8,7 +8,7 @@ export class TangoGridSnapshot extends AbstractGridSnapshot {
   crossRow(validRow) {
     const newSnapshot = this.clone();
     for (const cell of validRow) {
-      newSnapshot.setCellState(cell, cell.state);
+      newSnapshot.setCellState(cell, cell.cellState);
     }
     return newSnapshot;
   }
